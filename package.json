@@ -1,0 +1,27 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "This is the web page for Realmfall it will be where we post are games for the realmfall gamemakers this is the code for the realm fall race game  might look weird bc of the way it got pasted but it is in the making",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild speed-insights.js --bundle --outfile=dist/speed-insights.min.js --format=iife",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OK-OK-game/Realmfall.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OK-OK-game/Realmfall/issues"
+  },
+  "homepage": "https://github.com/OK-OK-game/Realmfall#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
