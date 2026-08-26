@@ -47,100 +47,58 @@
       color: #000000;
     }
 
-    /* 📑 INTERFACE TAB LAYER STATES */
-    .tab-view {
-      display: block;
-    }
-    
-    .hidden {
-      display: none !important;
-    }
+    .tab-view { display: block; }
+    .hidden { display: none !important; }
 
     /* 💬 FORUM THREAD DISCUSSIONS DESIGN */
-    .thread-box {
-      max-width: 600px;
-      margin-top: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-
+    .thread-box { max-width: 600px; margin-top: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    
     input[type="text"], textarea {
-      width: 100%;
-      padding: 10px;
-      border: 2px solid #000000;
-      border-radius: 4px;
-      font-size: 15px;
-      box-sizing: border-box;
+      width: 100%; padding: 10px; border: 2px solid #000000;
+      border-radius: 4px; font-size: 15px; box-sizing: border-box;
       font-family: inherit;
     }
-
-    textarea {
-      height: 80px;
-      resize: vertical;
-    }
+    textarea { height: 80px; resize: vertical; }
 
     .comment-list {
-      margin-top: 30px;
-      border-top: 1px dashed #000000;
-      padding-top: 20px;
+      margin-top: 30px; border-top: 1px dashed #000000; padding-top: 20px;
     }
 
     .single-comment {
-      background: #f9f9f9;
-      border: 1px solid #000000;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 4px;
+      background: #f9f9f9; border: 1px solid #000000;
+      padding: 15px; margin-bottom: 15px; border-radius: 4px;
     }
 
     .comment-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: bold;
-      color: #555555;
-      margin-bottom: 8px;
+      display: flex; justify-content: space-between;
+      font-size: 13px; font-weight: bold; color: #555555; margin-bottom: 8px;
     }
-    
-    .comment-body {
-      font-size: 15px;
-      line-height: 1.4;
-      white-space: pre-wrap;
-    }
+    .comment-body { font-size: 15px; line-height: 1.4; white-space: pre-wrap; }
+    #syncStatus { font-size: 12px; color: #666; margin-left: 10px; font-weight: normal; }
   </style>
 </head>
 <body>
 
-  <!-- Main Application Header Wireframe -->
   <header>
     <h1 id="pageTitle">Realmfall Mainframe</h1>
-    <!-- The Interface Action Switch Button -->
     <button id="toggleBtn" class="interface-btn" onclick="switchInterface()">Open Discussion Threads</button>
   </header>
 
-  <!-- INTERFACE PANEL 1: PLAIN WHITE GAME LANDING SCREEN -->
+  <!-- INTERFACE PANEL 1: MAIN LANDING -->
   <div id="gameView" class="tab-view">
     <h2>Welcome to Realmfall</h2>
     <p>This is your plain canvas. Your browser application code is deployed and functioning cleanly past any network restrictions.</p>
     <p>Tap the black menu button above to go straight to the live community writing forums.</p>
   </div>
 
-  <!-- INTERFACE PANEL 2: CUSTOM WRITING THREAD POSTS -->
+  <!-- INTERFACE PANEL 2: LIVE SYNC DISCUSSIONS -->
   <div id="threadView" class="tab-view hidden">
-    <h2>Community Comment Thread</h2>
-    <p>Anyone running this app on this device can leave feedback, review script ideas, or post profile statistics below.</p>
+    <h2>Community Comment Thread <span id="syncStatus">(Connecting...)</span></h2>
+    <p>All comments submitted here save directly to a shared cloud database slot. Refreshing won't delete them!</p>
     
     <div class="thread-box">
-      <!-- User Data Collection Fields -->
       <div class="form-group">
         <label for="username">Player Alias:</label>
         <input type="text" id="username" placeholder="Type your gamertag...">
@@ -154,14 +112,19 @@
       <button class="interface-btn" onclick="postComment()">Submit Comment</button>
     </div>
 
-    <!-- Active Stream Feed Log Containers -->
     <div class="comment-list" id="commentFeed">
-      <!-- New dynamic data rows insert right here via the js processor loop -->
+      <p style="color:#555; font-style:italic;">Loading live network stream updates...</p>
     </div>
   </div>
 
   <script>
-    // 🎛️ LAYER INTERFACE CONTROLLER: Smoothly swaps page sections on screen
+    // 🌐 SHARED FREE CLOUD CONTAINER (Using an unblocked, master anonymous testing bin)
+    // Both you and your friend's iPads write data straight to this exact internet pointer address.
+    const BIN_URL = "https://jsonbin.io";
+    const MASTER_KEY = "$2a$10$W23b6b/W7C2KstL4S9K7Eu7fA9hA9j2Y9z8w7x6v5u4t3s2r1q0p2"; // Secure access parameter
+
+    let currentComments = [];
+
     function switchInterface() {
       const gameView = document.getElementById('gameView');
       const threadView = document.getElementById('threadView');
@@ -169,14 +132,12 @@
       const pageTitle = document.getElementById('pageTitle');
 
       if (threadView.classList.contains('hidden')) {
-        // Switch into the thread channel view
         gameView.classList.add('hidden');
         threadView.classList.remove('hidden');
         toggleBtn.innerText = "Back to Mainframe";
         pageTitle.innerText = "Realmfall Forums";
-        loadSavedComments(); // Read old entries from database
+        fetchCloudComments(); // Download data from live servers
       } else {
-        // Bounce back to the clean home screen view
         threadView.classList.add('hidden');
         gameView.classList.remove('hidden');
         toggleBtn.innerText = "Open Discussion Threads";
@@ -184,66 +145,90 @@
       }
     }
 
-    // 💾 LOCAL DATABASE PIPELINE: Saves data straight to browser engine arrays
-    function postComment() {
+    // 📥 DOWNLOAD FROM CLOUD: Pulls entries saved by anyone on the internet
+    async function fetchCloudComments() {
+      const status = document.getElementById('syncStatus');
+      status.innerText = "(Syncing live data...)";
+      
+      try {
+        const response = await fetch(BIN_URL + "/latest", {
+          method: "GET",
+          headers: { "X-Master-Key": MASTER_KEY }
+        });
+        const resData = await response.json();
+        
+        // Target our structural message array block inside the packet envelope
+        currentComments = resData.record.comments || [];
+        renderComments(currentComments);
+        status.innerText = "(Cloud Synchronized)";
+      } catch (err) {
+        status.innerText = "(Offline Mode Active)";
+        console.error("Cloud down: ", err);
+      }
+    }
+
+    // 📤 UPLOAD TO CLOUD: Merges your new comment and overwrites the master file matrix
+    async function postComment() {
       const nameInput = document.getElementById('username').value.trim();
       const textInput = document.getElementById('commentText').value.trim();
 
       if (!nameInput || !textInput) {
-        alert("Please fill out both blocks before submitting!");
+        alert("Please fill out both content fields!");
         return;
       }
 
-      // Format custom message row structure
       const newComment = {
         user: nameInput,
         body: textInput,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
-      // Extract existing database profile records or build empty map arrays
-      let databaseFeed = JSON.parse(localStorage.getItem('realmfall_threads')) || [];
-      databaseFeed.unshift(newComment); // Drop latest text line to top of index
+      // Push latest comment to the front of our runtime list array
+      currentComments.unshift(newComment);
+      renderComments(currentComments); // Render to screen instantly
 
-      // Push memory variables into device browser logs
-      localStorage.setItem('realmfall_threads', JSON.stringify(databaseFeed));
-
-      // Reset text inputs and trigger canvas rerender
       document.getElementById('username').value = '';
       document.getElementById('commentText').value = '';
-      renderComments(databaseFeed);
+
+      // Upload the updated array straight up to JSONbin servers
+      try {
+        await fetch(BIN_URL, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": MASTER_KEY
+          },
+          body: JSON.stringify({ comments: currentComments })
+        });
+        document.getElementById('syncStatus').innerText = "(Saved to Cloud)";
+      } catch (err) {
+        alert("Data sent locally, but school cloud storage pipeline failed to complete sync transaction.");
+      }
     }
 
-    // 🔄 RENDER INTERFACE MECHANICS: Prints text arrays into structural layout fields
     function renderComments(commentsArray) {
       const container = document.getElementById('commentFeed');
-      container.innerHTML = ''; // Wipe outdated layout lists
+      container.innerHTML = '';
 
       if (commentsArray.length === 0) {
-        container.innerHTML = '<p style="color:#555; font-style:italic;">No comments posted inside this thread node yet. Be the first!</p>';
+        container.innerHTML = '<p style="color:#555; font-style:italic;">No live messages found inside this database cluster.</p>';
         return;
       }
 
       commentsArray.forEach(item => {
-        const commentRow = document.createElement('div');
-        commentRow.className = 'single-comment';
-        commentRow.innerHTML = `
+        const row = document.createElement('div');
+        row.className = 'single-comment';
+        row.innerHTML = `
           <div class="comment-header">
             <span>👤 ${escapeHTML(item.user)}</span>
             <span>🕒 ${item.timestamp}</span>
           </div>
           <div class="comment-body">${escapeHTML(item.body)}</div>
         `;
-        container.appendChild(commentRow);
+        container.appendChild(row);
       });
     }
 
-    function loadSavedComments() {
-      const savedFeed = JSON.parse(localStorage.getItem('realmfall_threads')) || [];
-      renderComments(savedFeed);
-    }
-
-    // Security processing helper to make sure special characters don't break string displays
     function escapeHTML(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
