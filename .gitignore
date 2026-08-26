@@ -1,0 +1,5 @@
+# Dependencies
+node_modules/
+
+# Build output is committed since this is a static site
+# dist/ is intentionally NOT ignored - the bundled file is needed for deployment
