@@ -99,7 +99,6 @@
     <p>All comments submitted here save directly to a shared cloud database slot through an unblocked network proxy.</p>
     
     <div class="thread-box">
-      <!-- 📋 FIREWALL-PROOF COMPLIANT FORM COMPONENT -->
       <form id="commentForm" onsubmit="postComment(event)">
         <div class="form-group">
           <label for="username">Player Alias:</label>
@@ -150,7 +149,6 @@
       }
     }
 
-    // 📥 DOWNLOAD FROM CLOUD: Pulls entries safely via the education proxy
     async function fetchCloudComments() {
       const status = document.getElementById('syncStatus');
       status.innerText = "(Syncing live data...)";
@@ -166,15 +164,13 @@
         status.innerText = "(Cloud Synchronized)";
       } catch (err) {
         status.innerText = "(Offline Mode Active)";
-        // Fallback to local storage if internet drops out completely
         const backupFeed = JSON.parse(localStorage.getItem('realmfall_threads_cache')) || [];
         renderComments(backupFeed);
       }
     }
 
-    // 📤 UPLOAD TO CLOUD: Uses a highly compliant standard web form data post loop
     async function postComment(event) {
-      event.preventDefault(); // Stop page from resetting instantly
+      event.preventDefault(); 
       
       const nameInput = document.getElementById('username').value.trim();
       const textInput = document.getElementById('commentText').value.trim();
@@ -188,15 +184,13 @@
       currentComments.unshift(newComment);
       renderComments(currentComments);
 
-      // Save to immediate device memory cache as a backup placeholder
       localStorage.setItem('realmfall_threads_cache', JSON.stringify(currentComments));
 
       document.getElementById('username').value = '';
       document.getElementById('commentText').value = '';
 
-      // Force upload using standard web application method format
       try {
-        const response = await fetch(DIRECT_URL, {
+        await fetch(DIRECT_URL, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -207,8 +201,7 @@
         
         document.getElementById('syncStatus').innerText = "(Saved to Cloud)";
       } catch (err) {
-        // Ultimate backup: Submit data payload as a trusted public submission link
-        const unblockedFormGateway = "https://formspree.io"; // Sandbox endpoint tracking node
+        const unblockedFormGateway = "https://formspree.io"; 
         fetch(unblockedFormGateway, {
           method: "POST",
           headers: { "Accept": "application/json" },
@@ -245,6 +238,13 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
+
+  <!-- 📈 VERCEL WEB ANALYTICS PIPELINE AUTOMATION -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- ⚡ VERCEL SPEED INSIGHTS AUTOMATION -->
+  <!-- Replaces framework imports for plain HTML sites to track performance specs -->
+  <script defer src="/_vercel/speed-insights/script.js"></script>
 
 </body>
 </html>
