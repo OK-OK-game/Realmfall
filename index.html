@@ -3,161 +3,249 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Gaming Network | Premium PvP Portal</title>
+  <title>Realmfall Game Hub</title>
   <style>
-    /* 🌌 DEEP SPACE GLOW DESIGN PARAMETERS */
-    :root {
-      --space-black: #060813;
-      --card-gray: rgba(17, 24, 39, 0.75);
-      --neon-blue: #00f2ff;
-      --neon-pink: #ff007f;
-      --neon-green: #39ff14;
-      --text-white: #f8fafc;
-      --text-muted: #64748b;
-    }
-
+    /* ▫️ PLAIN WHITE CORE MINIMALIST STYLING */
     body {
-      background-color: var(--space-black);
-      color: var(--text-white);
+      background-color: #ffffff;
+      color: #000000;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0; padding: 0;
-      overflow-x: hidden;
+      margin: 0;
+      padding: 30px;
     }
-
-    /* 🛸 GLOWING HEADER NAVIGATION PLATFORM */
+    
     header {
-      background: rgba(10, 15, 30, 0.85);
-      backdrop-filter: blur(12px);
-      padding: 20px 40px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid rgba(0, 242, 255, 0.15);
-      position: sticky; top: 0; z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
     }
-    .brand-logo {
-      font-size: 24px; font-weight: 900;
-      background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
-    }
-    .nav-menu { display: flex; gap: 25px; }
-    .nav-menu a {
-      color: #94a3b8; text-decoration: none; font-weight: bold;
-      font-size: 14px; letter-spacing: 1px; transition: 0.3s;
-    }
-    .nav-menu a:hover { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
-    /* ⚡ CYBERPUNK HERO DISPLAY CORNER */
-    .hero-panel {
-      text-align: center; padding: 80px 20px;
-      background: radial-gradient(circle at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
-      position: relative;
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
-    .live-tracker {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: rgba(57, 255, 20, 0.08); border: 1px solid var(--neon-green);
-      color: #a3e635; padding: 10px 24px; border-radius: 30px;
-      font-size: 13px; font-weight: bold; letter-spacing: 1px;
-      box-shadow: 0 0 15px rgba(57, 255, 20, 0.15);
-    }
-    .pulse-core {
-      width: 10px; height: 10px; background: var(--neon-green);
-      border-radius: 50%; animation: radialPulse 2s infinite;
-    }
-    @keyframes radialPulse {
-      0% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(57, 255, 20, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0); }
-    }
-    
-    h1 { font-size: 46px; font-weight: 900; margin: 25px 0 10px 0; letter-spacing: -1px; }
-    .subtitle { color: var(--text-muted); font-size: 16px; max-width: 500px; margin: 0 auto 30px auto; }
-    
-    /* 🏷️ SERVER CONNECTION CONTAINER TERMINAL */
-    .ip-plate {
-      background: rgba(15, 23, 42, 0.6); padding: 14px 28px;
-      border-radius: 12px; font-family: monospace; color: var(--neon-blue);
-      border: 1px solid rgba(0, 242, 255, 0.25); display: inline-block;
-      font-size: 16px; cursor: pointer; transition: 0.3s;
-    }
-    .ip-plate:hover { background: rgba(0, 242, 255, 0.08); box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
 
-    /* 📊 PROFESSIONAL ARCADES GRID PROFILE */
-    .dashboard-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px; max-width: 1100px; margin: 20px auto 60px auto; padding: 0 20px;
+    .interface-btn {
+      background: #000000;
+      color: #ffffff;
+      border: 2px solid #000000;
+      padding: 10px 20px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
     }
-    .arcade-card {
-      background: var(--card-gray); border-radius: 16px; padding: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    .interface-btn:hover {
+      background: #ffffff;
+      color: #000000;
     }
-    .arcade-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--neon-pink);
-      box-shadow: 0 10px 30px rgba(255, 0, 127, 0.1);
+
+    /* 📑 INTERFACE TAB LAYER STATES */
+    .tab-view {
+      display: block;
     }
-    .arcade-card h3 { margin: 0 0 12px 0; font-size: 22px; color: #fff; letter-spacing: 0.5px; }
-    .arcade-card p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
     
-    .action-link {
-      display: block; text-align: center; background: linear-gradient(90deg, #1d4ed8, #4f46e5);
-      color: #fff; padding: 12px; border-radius: 8px; text-decoration: none;
-      font-weight: bold; font-size: 14px; transition: 0.3s;
+    .hidden {
+      display: none !important;
     }
-    .action-link:hover { background: linear-gradient(90deg, #2563eb, #6366f1); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+
+    /* 💬 FORUM THREAD DISCUSSIONS DESIGN */
+    .thread-box {
+      max-width: 600px;
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #000000;
+      border-radius: 4px;
+      font-size: 15px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
+    .comment-list {
+      margin-top: 30px;
+      border-top: 1px dashed #000000;
+      padding-top: 20px;
+    }
+
+    .single-comment {
+      background: #f9f9f9;
+      border: 1px solid #000000;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: bold;
+      color: #555555;
+      margin-bottom: 8px;
+    }
+    
+    .comment-body {
+      font-size: 15px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Frame -->
+  <!-- Main Application Header Wireframe -->
   <header>
-    <div class="brand-logo">NEXUS.NET</div>
-    <div class="nav-menu">
-      <a href="#modes">Battle Arenas</a>
-      <a href="#stats">Global Boards</a>
-      <a href="#store">Lobby Shop</a>
-    </div>
+    <h1 id="pageTitle">Realmfall Mainframe</h1>
+    <!-- The Interface Action Switch Button -->
+    <button id="toggleBtn" class="interface-btn" onclick="switchInterface()">Open Discussion Threads</button>
   </header>
 
-  <!-- Interactive Network Display Screen -->
-  <div class="hero-panel">
-    <div class="live-tracker">
-      <span class="pulse-core"></span> SYSTEM ACTIVE: <span id="playerCount">1,840</span> COMBATANTS ONLINE
-    </div>
-    <h1>Dominate the Arena Grid</h1>
-    <p class="subtitle">Connect straight from your network configuration portal into the ultimate action matrix database.</p>
-    
-    <!-- Tap to Copy Option Block -->
-    <div class="ip-plate" onclick="copyServerIP()">IP: PLAY.NEXUSNETWORK.NET</div>
+  <!-- INTERFACE PANEL 1: PLAIN WHITE GAME LANDING SCREEN -->
+  <div id="gameView" class="tab-view">
+    <h2>Welcome to Realmfall</h2>
+    <p>This is your plain canvas. Your browser application code is deployed and functioning cleanly past any network restrictions.</p>
+    <p>Tap the black menu button above to go straight to the live community writing forums.</p>
   </div>
 
-  <!-- Arena Module List -->
-  <div id="modes" class="dashboard-grid">
-    <div class="arcade-card">
-      <h3>⚔️ Chrono GenWars</h3>
-      <p>Construct complex core generators, mine automated resource currencies, fortify protective parameters, and scale custom server ladder updates alongside your squad unit lines.</p>
-      <a href="#" class="action-link">View Squad Positions</a>
-    </div>
+  <!-- INTERFACE PANEL 2: CUSTOM WRITING THREAD POSTS -->
+  <div id="threadView" class="tab-view hidden">
+    <h2>Community Comment Thread</h2>
+    <p>Anyone running this app on this device can leave feedback, review script ideas, or post profile statistics below.</p>
     
-    <div class="arcade-card">
-      <h3>🌌 Hyper SMP Kingdoms</h3>
-      <p>Claim dynamic space grids, manage custom trades, manufacture automated inventory production factories, and acquire rare aesthetic matrix gear packs.</p>
-      <a href="#" class="action-link">Browse Explorer Files</a>
+    <div class="thread-box">
+      <!-- User Data Collection Fields -->
+      <div class="form-group">
+        <label for="username">Player Alias:</label>
+        <input type="text" id="username" placeholder="Type your gamertag...">
+      </div>
+      
+      <div class="form-group">
+        <label for="commentText">Message Thread:</label>
+        <textarea id="commentText" placeholder="Write your commentary update here..."></textarea>
+      </div>
+      
+      <button class="interface-btn" onclick="postComment()">Submit Comment</button>
+    </div>
+
+    <!-- Active Stream Feed Log Containers -->
+    <div class="comment-list" id="commentFeed">
+      <!-- New dynamic data rows insert right here via the js processor loop -->
     </div>
   </div>
 
   <script>
-    // 🕹️ LIVE REFRESH LOOP: Randomly changes online count to simulate real gaming network tracking
-    setInterval(() => {
-      const baseCount = 1800;
-      const variation = Math.floor(Math.random() * 60);
-      document.getElementById('playerCount').innerText = (baseCount + variation).toLocaleString();
-    }, 4000);
+    // 🎛️ LAYER INTERFACE CONTROLLER: Smoothly swaps page sections on screen
+    function switchInterface() {
+      const gameView = document.getElementById('gameView');
+      const threadView = document.getElementById('threadView');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const pageTitle = document.getElementById('pageTitle');
 
-    // 📋 UTILITY: Quick tap notification profile to alert copy action success
-    function copyServerIP() {
-      navigator.clipboard.writeText("play.nexusnetwork.net");
-      alert("Server IP address copied into memory buffer! Ready for login console deployment.");
+      if (threadView.classList.contains('hidden')) {
+        // Switch into the thread channel view
+        gameView.classList.add('hidden');
+        threadView.classList.remove('hidden');
+        toggleBtn.innerText = "Back to Mainframe";
+        pageTitle.innerText = "Realmfall Forums";
+        loadSavedComments(); // Read old entries from database
+      } else {
+        // Bounce back to the clean home screen view
+        threadView.classList.add('hidden');
+        gameView.classList.remove('hidden');
+        toggleBtn.innerText = "Open Discussion Threads";
+        pageTitle.innerText = "Realmfall Mainframe";
+      }
+    }
+
+    // 💾 LOCAL DATABASE PIPELINE: Saves data straight to browser engine arrays
+    function postComment() {
+      const nameInput = document.getElementById('username').value.trim();
+      const textInput = document.getElementById('commentText').value.trim();
+
+      if (!nameInput || !textInput) {
+        alert("Please fill out both blocks before submitting!");
+        return;
+      }
+
+      // Format custom message row structure
+      const newComment = {
+        user: nameInput,
+        body: textInput,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      // Extract existing database profile records or build empty map arrays
+      let databaseFeed = JSON.parse(localStorage.getItem('realmfall_threads')) || [];
+      databaseFeed.unshift(newComment); // Drop latest text line to top of index
+
+      // Push memory variables into device browser logs
+      localStorage.setItem('realmfall_threads', JSON.stringify(databaseFeed));
+
+      // Reset text inputs and trigger canvas rerender
+      document.getElementById('username').value = '';
+      document.getElementById('commentText').value = '';
+      renderComments(databaseFeed);
+    }
+
+    // 🔄 RENDER INTERFACE MECHANICS: Prints text arrays into structural layout fields
+    function renderComments(commentsArray) {
+      const container = document.getElementById('commentFeed');
+      container.innerHTML = ''; // Wipe outdated layout lists
+
+      if (commentsArray.length === 0) {
+        container.innerHTML = '<p style="color:#555; font-style:italic;">No comments posted inside this thread node yet. Be the first!</p>';
+        return;
+      }
+
+      commentsArray.forEach(item => {
+        const commentRow = document.createElement('div');
+        commentRow.className = 'single-comment';
+        commentRow.innerHTML = `
+          <div class="comment-header">
+            <span>👤 ${escapeHTML(item.user)}</span>
+            <span>🕒 ${item.timestamp}</span>
+          </div>
+          <div class="comment-body">${escapeHTML(item.body)}</div>
+        `;
+        container.appendChild(commentRow);
+      });
+    }
+
+    function loadSavedComments() {
+      const savedFeed = JSON.parse(localStorage.getItem('realmfall_threads')) || [];
+      renderComments(savedFeed);
+    }
+
+    // Security processing helper to make sure special characters don't break string displays
+    function escapeHTML(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
 
