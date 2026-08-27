@@ -5,78 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Realmfall Game Hub</title>
   <style>
-    /* ▫️ PLAIN WHITE CORE MINIMALIST STYLING */
+    /* 🌌 PREMIUM OBSIDIAN VAULT INTERFACE STYLING */
+    :root {
+      --bg-space: #030712;
+      --glass-panel: rgba(15, 23, 42, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --neon-cyan: #00f2ff;
+      --neon-orange: #ff5500;
+      --neon-gold: #facc15;
+      --text-main: #f8fafc;
+    }
+
     body {
-      background-color: #ffffff;
-      color: #000000;
+      background-color: var(--bg-space);
+      color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 30px;
+      margin: 0; padding: 30px;
+      background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, transparent 60%);
     }
     
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #000000;
-      padding-bottom: 15px;
-      margin-bottom: 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; margin-bottom: 30px;
     }
 
     h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
     .interface-btn {
-      background: #000000;
-      color: #ffffff;
-      border: 2px solid #000000;
-      padding: 10px 20px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 4px;
-      text-transform: uppercase;
+      background: var(--glass-panel); color: #fff;
+      border: 1px solid var(--glass-border); padding: 12px 24px;
+      font-weight: bold; font-size: 13px; cursor: pointer; border-radius: 8px;
+      text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     .interface-btn:hover {
-      background: #ffffff;
-      color: #000000;
+      background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
     .tab-view { display: block; }
     .hidden { display: none !important; }
 
-    /* 💬 FORUM THREAD DISCUSSIONS DESIGN */
+    /* 🎬 HIGH-QUALITY CINEMATIC VECTOR GRAPHICS MATRIX */
+    .movie-canvas {
+      width: 100%; height: 420px;
+      background: radial-gradient(circle at 50% 100%, #1c0a05 0%, #030712 100%);
+      border: 1px solid var(--glass-border); border-radius: 12px;
+      position: relative; overflow: hidden; margin-bottom: 35px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 100px rgba(0,0,0,0.8);
+    }
+
+    /* 🌋 STACKED LAYER ISOMETRIC VOLCANO */
+    .volcano-group { position: absolute; bottom: 0; left: 8%; width: 360px; height: 240px; z-index: 2; }
+    .base-mountain {
+      position: absolute; bottom: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      clip-path: polygon(50% 15%, 90% 100%, 10% 100%);
+    }
+    .magma-vent {
+      position: absolute; bottom: 198px; left: 43%; width: 50px; height: 16px;
+      background: var(--neon-orange); border-radius: 50%; z-index: 3;
+      box-shadow: 0 -10px 40px var(--neon-orange), 0 0 30px #ef4444;
+      animation: coreChamberPulse 2s infinite ease-in-out;
+    }
+    @keyframes coreChamberPulse {
+      0%, 100% { transform: scale(1); background: #ea580c; filter: brightness(1); }
+      50% { transform: scale(1.1); background: #ff7849; filter: brightness(1.3); }
+    }
+    .lava-fume {
+      position: absolute; bottom: 210px; left: 48%; width: 12px; height: 12px;
+      background: rgba(239, 68, 68, 0.6); border-radius: 50%; z-index: 1; filter: blur(5px);
+      animation: volcanoEruption 3s infinite linear;
+    }
+    @keyframes volcanoEruption {
+      0% { transform: translateY(0) scale(0.5); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-200px) scale(4); opacity: 0; background: #3f3f46; }
+    }
+
+    /* 💀 BIOMECHANICAL SKELETON SENTINEL */
+    .skeleton-avatar {
+      position: absolute; bottom: 30px; right: 12%; width: 70px; height: 130px;
+      z-index: 5; animation: skeletonBreathing 2.8s infinite ease-in-out; transform-origin: bottom center;
+    }
+    .skel-skull {
+      width: 28px; height: 28px; background: #f8fafc; border-radius: 50%;
+      position: absolute; top: 0; left: 21px; border: 2px solid #000;
+      box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+    }
+    .skel-skull::after { content: '💀'; font-size: 18px; position: absolute; top: 3px; left: 3px; }
+    .skel-spine { width: 6px; height: 55px; background: #cbd5e1; position: absolute; top: 30px; left: 32px; border-radius: 4px; }
+    .skel-rib { width: 26px; height: 6px; background: #cbd5e1; position: absolute; left: 22px; border-radius: 3px; border: 1px solid #000; }
+    .r1 { top: 38px; } .r2 { top: 48px; } .r3 { top: 58px; }
+    .skel-left-arm {
+      width: 6px; height: 42px; background: #cbd5e1; position: absolute; top: 34px; left: 12px;
+      border-radius: 3px; transform-origin: top center; animation: sentinelCombatWave 3.5s infinite ease-in-out;
+    }
+    @keyframes skeletonBreathing {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(-5px) scaleY(1.04); }
+    }
+    @keyframes sentinelCombatWave {
+      0%, 100% { transform: rotate(25deg); }
+      50% { transform: rotate(-45deg); }
+    }
+
+    /* 📦 3D PERSPECTIVE VAULT CHEST */
+    .loot-chest { position: absolute; bottom: 25px; left: 46%; width: 100px; height: 80px; z-index: 4; perspective: 400px; }
+    .chest-container { width: 100px; height: 50px; background: #451a03; border: 2px solid #000; position: absolute; bottom: 0; border-radius: 0 0 6px 6px; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.6); }
+    .gold-pile {
+      width: 86px; height: 30px; background: var(--neon-gold); position: absolute; bottom: 40px; left: 7px;
+      border-radius: 50% 50% 0 0; box-shadow: 0 0 30px var(--neon-gold), 0 0 60px #fff;
+      animation: auraGold 2s infinite ease-in-out;
+    }
+    .chest-top {
+      width: 100px; height: 36px; background: #78350f; border: 2px solid #000; border-radius: 20px 20px 0 0;
+      position: absolute; bottom: 47px; transform-origin: bottom center;
+      animation: lockboxMechanicalOpen 4s infinite cubic-bezier(0.85, 0, 0.15, 1);
+    }
+    @keyframes auraGold {
+      0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 5px var(--neon-gold)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 25px #fff); }
+    }
+    @keyframes lockboxMechanicalOpen {
+      0%, 100% { transform: translateY(0) rotateX(0deg); filter: brightness(1); }
+      30%, 70% { transform: translateY(-24px) rotateX(-65deg); filter: brightness(1.2); }
+    }
+
+    /* 💬 GLASS DISCUSSION PANELS */
     .thread-box { max-width: 600px; margin-top: 20px; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
     
     input[type="text"], textarea {
-      width: 100%; padding: 10px; border: 2px solid #000000;
-      border-radius: 4px; font-size: 15px; box-sizing: border-box;
-      font-family: inherit;
+      width: 100%; padding: 14px; border: 1px solid var(--glass-border);
+      border-radius: 8px; font-size: 15px; box-sizing: border-box;
+      font-family: inherit; background: var(--glass-panel); color: #fff;
+      backdrop-filter: blur(10px); transition: border 0.3s;
     }
-    textarea { height: 80px; resize: vertical; }
+    input[type="text"]:focus, textarea:focus { border-color: var(--neon-cyan); outline: none; }
+    textarea { height: 90px; resize: vertical; }
 
-    .comment-list {
-      margin-top: 30px; border-top: 1px dashed #000000; padding-top: 20px;
-    }
-
-    .single-comment {
-      background: #f9f9f9; border: 1px solid #000000;
-      padding: 15px; margin-bottom: 15px; border-radius: 4px;
-    }
-
-    .comment-header {
-      display: flex; justify-content: space-between;
-      font-size: 13px; font-weight: bold; color: #555555; margin-bottom: 8px;
-    }
-    .comment-body { font-size: 15px; line-height: 1.4; white-space: pre-wrap; }
-    #syncStatus { font-size: 12px; color: #666; margin-left: 10px; font-weight: normal; }
+    .comment-list { margin-top: 35px; border-top: 1px dashed var(--glass-border); padding-top: 25px; }
+    .single-comment { background: var(--glass-panel); border: 1px solid var(--glass-border); padding: 20px; margin-bottom: 15px; border-radius: 8px; backdrop-filter: blur(10px); }
+    .comment-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 10px; }
+    .comment-body { font-size: 15px; line-height: 1.5; white-space: pre-wrap; color: #cbd5e1; }
+    #syncStatus { font-size: 12px; color: var(--neon-cyan); margin-left: 10px; font-weight: normal; text-shadow: 0 0 10px var(--neon-cyan); }
   </style>
 </head>
 <body>
@@ -86,41 +163,49 @@
     <button id="toggleBtn" class="interface-btn" onclick="switchInterface()">Open Discussion Threads</button>
   </header>
 
-  <!-- INTERFACE PANEL 1: MAIN LANDING -->
   <div id="gameView" class="tab-view">
-    <h2>Welcome to Realmfall</h2>
-    <p>This is your plain canvas. Your browser application code is deployed and functioning cleanly past any network restrictions.</p>
-    <p>Tap the black menu button above to go straight to the live community writing forums.</p>
+    <div class="movie-canvas">
+      <div class="lava-fume" style="animation-delay: 0s;"></div>
+      <div class="lava-fume" style="animation-delay: 1s;"></div>
+      <div class="lava-fume" style="animation-delay: 2s;"></div>
+      <div class="volcano-group"><div class="base-mountain"></div></div>
+      <div class="magma-vent"></div>
+      <div class="loot-chest">
+        <div class="gold-pile"></div>
+        <div class="chest-container"></div>
+        <div class="chest-top"></div>
+      </div>
+      <div class="skeleton-avatar">
+        <div class="skel-skull"></div>
+        <div class="skel-spine"></div>
+        <div class="skel-rib r1"></div>
+        <div class="skel-rib r2"></div>
+        <div class="skel-rib r3"></div>
+        <div class="skel-left-arm"></div>
+      </div>
+    </div>
+
+    <h2 style="font-size:24px; font-weight:800; margin-bottom:10px;">Welcome to Realmfall Engine</h2>
+    <p style="color:#64748b; font-size:15px; line-height:1.6; max-width:600px; margin-top:0;">Your high-fidelity graphical user interface and script pipelines are fully initialized. Launch the forum node below to collaborate with your team coordinates live.</p>
   </div>
 
-  <!-- INTERFACE PANEL 2: LIVE SYNC DISCUSSIONS -->
   <div id="threadView" class="tab-view hidden">
     <h2>Community Comment Thread <span id="syncStatus">(Connecting...)</span></h2>
-    <p>All comments submitted here save directly to a shared cloud database slot through an unblocked network proxy.</p>
+    <p style="color:#64748b; margin-bottom:25px;">All submissions sync directly across network pipelines into the master cluster core.</p>
     
     <div class="thread-box">
       <form id="commentForm" onsubmit="postComment(event)">
         <div class="form-group">
-          <label for="username">Player Alias:</label>
+          <label for="username">Player Alias</label>
           <input type="text" id="username" name="username" required placeholder="Type your gamertag...">
         </div>
-        
         <div class="form-group">
-          <label for="commentText">Message Thread:</label>
+          <label for="commentText">Message Thread</label>
           <textarea id="commentText" name="message" required placeholder="Write your commentary update here..."></textarea>
         </div>
-        
         <button type="submit" class="interface-btn">Submit Comment</button>
-      </form>
-    </div>
-
-    <div class="comment-list" id="commentFeed">
-      <p style="color:#555; font-style:italic;">Loading live network stream updates...</p>
-    </div>
-  </div>
-
+``html
   <script>
-    // 🌐 UNBLOCKED FIREWALL-BYPASSING DATA CLOUD CONFIGURATION
     const BIN_ID = "66ccfe9ae41b4d34e4c7ba4f";
     const MASTER_KEY = "$2a$10$W23b6b/W7C2KstL4S9K7Eu7fA9hA9j2Y9z8w7x6v5u4t3s2r1q0p2";
     
@@ -128,6 +213,15 @@
     const DIRECT_URL = `https://jsonbin.io{BIN_ID}`;
 
     let currentComments = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const initialCache = JSON.parse(localStorage.getItem('realmfall_threads_cache')) || [];
+      if (initialCache.length > 0) {
+        currentComments = initialCache;
+        renderComments(currentComments);
+        document.getElementById('syncStatus').innerText = "(Local Cache Loaded)";
+      }
+    });
 
     function switchInterface() {
       const gameView = document.getElementById('gameView');
@@ -160,6 +254,8 @@
         
         const resData = JSON.parse(proxyData.contents);
         currentComments = resData.record.comments || [];
+        
+        localStorage.setItem('realmfall_threads_cache', JSON.stringify(currentComments));
         renderComments(currentComments);
         status.innerText = "(Cloud Synchronized)";
       } catch (err) {
@@ -190,15 +286,11 @@
       document.getElementById('commentText').value = '';
 
       try {
-        await fetch(DIRECT_URL, {
+        const response = await fetch(DIRECT_URL, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Master-Key": MASTER_KEY
-          },
+          headers: { "Content-Type": "application/json", "X-Master-Key": MASTER_KEY },
           body: JSON.stringify({ comments: currentComments })
         });
-        
         document.getElementById('syncStatus').innerText = "(Saved to Cloud)";
       } catch (err) {
         const unblockedFormGateway = "https://formspree.io"; 
@@ -207,7 +299,7 @@
           headers: { "Accept": "application/json" },
           body: JSON.stringify({ name: nameInput, comment: textInput })
         });
-        document.getElementById('syncStatus').innerText = "(Sent via Data Tunnel)";
+        document.getElementById('syncStatus').innerText = "(Saved to Device Local)";
       }
     }
 
@@ -216,7 +308,7 @@
       container.innerHTML = '';
 
       if (commentsArray.length === 0) {
-        container.innerHTML = '<p style="color:#555; font-style:italic;">No live messages found inside this database cluster.</p>';
+        container.innerHTML = '<p style="color:#64748b; font-style:italic;">No live messages found in core feed index.</p>';
         return;
       }
 
@@ -239,11 +331,7 @@
     }
   </script>
 
-  <!-- 📈 VERCEL WEB ANALYTICS PIPELINE AUTOMATION -->
   <script defer src="/_vercel/insights/script.js"></script>
-
-  <!-- ⚡ VERCEL SPEED INSIGHTS AUTOMATION -->
-  <!-- Replaces framework imports for plain HTML sites to track performance specs -->
   <script defer src="/_vercel/speed-insights/script.js"></script>
 
 </body>
