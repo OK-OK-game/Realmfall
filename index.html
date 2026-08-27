@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Realmfall Developer Matrix</title>
+  <title>Realmfall Secure Forum Mainframe</title>
+  <!-- Load the Unblocked Supabase Auth CDN Engine -->
+  <script src="https://jsdelivr.net"></script>
   <style>
-    /* 🌌 INPVP OBSIDIAN FORUM BRAND PARAMETERS */
+    /* 🌌 INPVP OBSIDIAN FORUM PARAMETERS */
     :root {
       --bg-dark: #090d16;
       --panel-glass: rgba(17, 24, 39, 0.7);
       --border-glow: rgba(56, 189, 248, 0.12);
       --neon-blue: #38bdf8;
+      --neon-red: #ef4444;
       --text-bright: #f8fafc;
       --text-muted: #64748b;
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-bright);
+      background-color: var(--bg-dark); color: var(--text-bright);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0; padding: 25px;
       background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, transparent 50%);
@@ -40,22 +42,34 @@
     .action-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px rgba(56,189,248,0.4); }
     .action-btn.secondary { border-color: var(--text-muted); color: var(--text-muted); background: transparent; }
     .action-btn.secondary:hover { background: #1e293b; color: #fff; }
+    
+    .admin-delete-btn {
+      background: rgba(239, 68, 68, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red);
+      padding: 6px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 4px;
+      margin-left: auto; transition: 0.2s;
+    }
+    .admin-delete-btn:hover { background: var(--neon-red); color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
 
     .view-panel { display: block; }
     .hidden { display: none !important; }
 
-    /* 🗂️ INPVP THREAD INDEX LIST GRID */
+    .auth-gate {
+      text-align: center; max-width: 450px; margin: 80px auto;
+      background: var(--panel-glass); border: 1px solid var(--border-glow);
+      padding: 40px 20px; border-radius: 12px; backdrop-filter: blur(10px);
+    }
+
     .forum-feed { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
     .thread-row {
       background: var(--panel-glass); border: 1px solid var(--border-glow);
-      padding: 20px; border-radius: 10px; cursor: pointer;
+      padding: 20px; border-radius: 10px; cursor: pointer; display: flex; align-items: center;
       transition: transform 0.2s, border-color 0.2s;
     }
     .thread-row:hover { transform: translateY(-2px); border-color: var(--neon-blue); }
+    .thread-info { flex-grow: 1; }
     .thread-title { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 6px; }
     .thread-meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 15px; }
 
-    /* 📝 STRUCTURAL ENTRY INPUT CONTROLS */
     .input-frame { max-width: 650px; background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-weight: bold; font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
@@ -63,145 +77,159 @@
       width: 100%; padding: 12px; border: 1px solid var(--border-glow); border-radius: 6px;
       font-size: 15px; box-sizing: border-box; background: #0b1329; color: #fff; font-family: inherit;
     }
-    input[type="text"]:focus, textarea:focus { border-color: var(--neon-blue); outline: none; }
     textarea { height: 90px; resize: vertical; }
 
-    /* 💬 NESTED FEED REPLY ITEMS */
     .nested-container { border-left: 2px solid var(--neon-blue); padding-left: 20px; margin-top: 25px; }
-    .reply-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); padding: 15px; border-radius: 8px; margin-bottom: 12px; }
-    .reply-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: var(--text-muted); margin-bottom: 6px; }
-    .reply-body { font-size: 15px; color: #cbd5e1; line-height: 1.4; white-space: pre-wrap; }
+    .reply-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1 id="headerLogo">Realmfall Central</h1>
-    <button id="globalActionBtn" class="action-btn" onclick="showNewThreadForm()">+ New Topic Thread</button>
-  </header>
-
-  <!-- VIEW 1: MASTER THREAD CONTROLLER INDEX HUB -->
-  <div id="indexView" class="view-panel">
-    <h2>Active Community Boards</h2>
-    <div class="forum-feed" id="mainThreadFeed">
-      <!-- Active pipeline rows populate here -->
-    </div>
+  <!-- 🔐 INTERFACE STATE 0: LOGIN GATE -->
+  <div id="authGateView" class="auth-gate">
+    <h2 style="font-size: 24px; margin-bottom: 10px;">🔐 Identity Verification Required</h2>
+    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">You must sign in with a verified GitHub profile container to read or execute commands inside this dashboard.</p>
+    <button class="action-btn" style="width: 100%; padding: 14px;" onclick="loginWithGitHub()">Sign In with GitHub</button>
   </div>
 
-  <!-- VIEW 2: NEW THREAD GENERATOR SCREEN -->
-  <div id="createView" class="view-panel hidden">
-    <h2>Launch New Discussion Thread</h2>
-    <div class="input-frame">
-      <div class="form-group">
-        <label>Author Alias</label>
-        <input type="text" id="threadAuthor" placeholder="Type your gamertag...">
+  <!-- INTERFACE CORE PANEL HUB -->
+  <div id="mainDashboardView" class="hidden">
+    <header>
+      <h1 id="headerLogo">Realmfall Central</h1>
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <span id="userBadge" style="font-size:14px; color: var(--neon-blue); font-weight: bold;"></span>
+        <button id="globalActionBtn" class="action-btn" onclick="showNewThreadForm()">+ New Topic Thread</button>
+        <button class="action-btn secondary" onclick="logoutSession()">Sign Out</button>
       </div>
-      <div class="form-group">
-        <label>Thread Topic Header Title</label>
-        <input type="text" id="threadTitle" placeholder="What is this discussion about?">
-      </div>
-      <div class="form-group">
-        <label>Opening Message Statement</label>
-        <textarea id="threadContent" placeholder="Describe your topic details or server report..."></textarea>
-      </div>
-      <div style="display:flex; gap:10px;">
-        <button class="action-btn" onclick="submitNewThread()">Publish Thread</button>
-        <button class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
-      </div>
-    </div>
-  </div>
-<!-- VIEW 3: NESTED INDIVIDUAL CHANNEL VIEW -->
-  <div id="channelView" class="view-panel hidden">
-    <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
-    <div class="thread-row" style="cursor:default; border-color:var(--neon-blue);">
-      <div id="activeThreadTitle" class="thread-title" style="font-size:22px;"></div>
-      <div id="activeThreadMeta" class="thread-meta"></div>
-      <p id="activeThreadBody" style="line-height:1.6; margin-top:15px; color:#cbd5e1; font-size:16px; white-space:pre-wrap;"></p>
+    </header>
+
+    <!-- VIEW 1: INDEX BOARD -->
+    <div id="indexView" class="view-panel">
+      <h2>Active Community Boards</h2>
+      <div class="forum-feed" id="mainThreadFeed"></div>
     </div>
 
-    <div class="nested-container">
-      <h3>Replies & Comments</h3>
-      <div class="input-frame" style="padding:15px; margin-bottom:20px;">
+    <!-- VIEW 2: TOPIC GENERATOR -->
+    <div id="createView" class="view-panel hidden">
+      <h2>Launch New Discussion Thread</h2>
+      <div class="input-frame">
         <div class="form-group">
-          <label>Alias</label>
-          <input type="text" id="replyAuthor" placeholder="Your gamertag...">
+          <label>Thread Topic Header Title</label>
+          <input type="text" id="threadTitle" placeholder="What is this discussion about?">
         </div>
         <div class="form-group">
-          <label>Comment Message</label>
-          <textarea id="replyText" style="height:60px;" placeholder="Add to the discussion thread..."></textarea>
+          <label>Opening Message Statement</label>
+          <textarea id="threadContent" placeholder="Describe your topic details or server report..."></textarea>
         </div>
-        <button class="action-btn" onclick="submitReply()">Submit Reply</button>
+        <div style="display:flex; gap:10px;">
+          <button class="action-btn" onclick="submitNewThread()">Publish Thread</button>
+          <button class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
+        </div>
       </div>
-      <div id="nestedReplyFeed"></div>
+    </div>
+    <!-- VIEW 3: NESTED INTERFACE TOPIC MODULE -->
+    <div id="channelView" class="view-panel hidden">
+      <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
+      <div class="thread-row" style="cursor:default; border-color:var(--neon-blue);">
+        <div class="thread-info">
+          <div id="activeThreadTitle" class="thread-title" style="font-size:22px;"></div>
+          <div id="activeThreadMeta" class="thread-meta"></div>
+          <p id="activeThreadBody" style="line-height:1.6; margin-top:15px; color:#cbd5e1; font-size:16px; white-space:pre-wrap;"></p>
+        </div>
+      </div>
+
+      <div class="nested-container">
+        <h3>Replies & Comments</h3>
+        <div class="input-frame" style="padding:15px; margin-bottom:20px;">
+          <div class="form-group">
+            <label>Comment Message</label>
+            <textarea id="replyText" style="height:60px;" placeholder="Add to the discussion thread..."></textarea>
+          </div>
+          <button class="action-btn" onclick="submitReply()">Submit Reply</button>
+        </div>
+        <div id="nestedReplyFeed"></div>
+      </div>
     </div>
   </div>
 
   <script>
+    // 🛠️ PERMISSIONS SECURITY ROUTING
+    const ADMIN_ACCOUNTS = ["OK-OK-game", "babah-black-sheep"]; 
+
+    const supabaseClient = supabase.createClient("https://supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpbmx5d3pzaHN0ZnNsZ3B4Z2V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ3MTY0MDAsImV4cCI6MjA0MDI5MjQwMH0.xN_u7Z-G_U4X9Fv_q1V8Z");
+
     let threadsDatabase = [];
     let selectedThreadId = null;
+    let loggedInUser = null;
 
-    // Load full array parameters right at launch sequence
-    window.addEventListener('DOMContentLoaded', () => {
-      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_inpvp_boards')) || [
-        {
-          id: 1714092100000,
-          author: "Admin_Core",
-          title: "Realmfall Official Alpha v1.0 Update Notes",
-          body: "Welcome to the primary board anchor. Report server ticks, logic latency metrics, or code framework adjustments inside this node stream.",
-          replies: [
-            { user: "SpeedRacer", text: "The loading speeds on the Vercel link layout are perfect. Zero input delay.", time: "06:12 AM" }
-          ],
-          time: "06:00 AM"
-        }
-      ];
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      
+      if (session) {
+        loggedInUser = session.user.user_metadata.user_name || session.user.email;
+        document.getElementById('authGateView').classList.add('hidden');
+        document.getElementById('mainDashboardView').classList.remove('hidden');
+        document.getElementById('userBadge').innerText = `👤 ${loggedInUser}`;
+      } else {
+        document.getElementById('mainDashboardView').classList.add('hidden');
+        document.getElementById('authGateView').classList.remove('hidden');
+      }
+
+      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_inpvp_boards')) || [];
       renderThreadIndex();
     });
+
+    async function loginWithGitHub() {
+      await supabaseClient.auth.signInWithOAuth({ provider: 'github' });
+    }
+
+    async function logoutSession() {
+      await supabaseClient.auth.signOut();
+      window.location.reload();
+    }
 
     function renderThreadIndex() {
       const feed = document.getElementById('mainThreadFeed');
       feed.innerHTML = '';
-      
+      const isAdmin = ADMIN_ACCOUNTS.includes(loggedInUser);
+
       threadsDatabase.forEach(item => {
         const row = document.createElement('div');
         row.className = 'thread-row';
-        row.onclick = () => openThreadChannel(item.id);
+        let deleteBtnHtml = isAdmin ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete</button>` : '';
+
         row.innerHTML = `
-          <div class="thread-title">${escapeHTML(item.title)}</div>
-          <div class="thread-meta">
-            <span>👤 Author: ${escapeHTML(item.author)}</span>
-            <span>💬 Replies: ${item.replies.length}</span>
-            <span>🕒 Posted: ${item.time}</span>
+          <div class="thread-info" onclick="openThreadChannel(${item.id})">
+            <div class="thread-title">${escapeHTML(item.title)}</div>
+            <div class="thread-meta">
+              <span>👤 Author: ${escapeHTML(item.author)}</span>
+              <span>💬 Replies: ${item.replies.length}</span>
+              <span>🕒 Posted: ${item.time}</span>
+            </div>
           </div>
+          ${deleteBtnHtml}
         `;
         feed.appendChild(row);
       });
     }
 
-    function showNewThreadForm() {
-      document.getElementById('indexView').classList.add('hidden');
-      document.getElementById('channelView').classList.add('hidden');
-      document.getElementById('createView').classList.remove('hidden');
-      document.getElementById('globalActionBtn').classList.add('hidden');
-    }
-
-    function returnToDashboard() {
-      document.getElementById('createView').classList.add('hidden');
-      document.getElementById('channelView').classList.add('hidden');
-      document.getElementById('indexView').classList.remove('hidden');
-      document.getElementById('globalActionBtn').classList.remove('hidden');
+    function deleteThread(id, event) {
+      event.stopPropagation();
+      if (!confirm("Are you sure you want to delete this topic thread?")) return;
+      threadsDatabase = threadsDatabase.filter(x => x.id !== id);
+      localStorage.setItem('realmfall_inpvp_boards', JSON.stringify(threadsDatabase));
       renderThreadIndex();
     }
 
     function submitNewThread() {
-      const author = document.getElementById('threadAuthor').value.trim();
       const title = document.getElementById('threadTitle').value.trim();
       const body = document.getElementById('threadContent').value.trim();
 
-      if (!author || !title || !body) { alert("Complete all text areas!"); return; }
+      if (!title || !body) { alert("Fill out the forms completely!"); return; }
 
       const newTopic = {
         id: Date.now(),
-        author: author,
+        author: loggedInUser,
         title: title,
         body: body,
         replies: [],
@@ -211,8 +239,6 @@
       threadsDatabase.unshift(newTopic);
       localStorage.setItem('realmfall_inpvp_boards', JSON.stringify(threadsDatabase));
       
-      // Wipe fields
-      document.getElementById('threadAuthor').value = '';
       document.getElementById('threadTitle').value = '';
       document.getElementById('threadContent').value = '';
       returnToDashboard();
@@ -224,7 +250,6 @@
       if (!target) return;
 
       document.getElementById('indexView').classList.add('hidden');
-      document.getElementById('globalActionBtn').classList.add('hidden');
       document.getElementById('channelView').classList.remove('hidden');
 
       document.getElementById('activeThreadTitle').innerText = target.title;
@@ -237,34 +262,48 @@
     function renderReplies(repliesArray) {
       const feed = document.getElementById('nestedReplyFeed');
       feed.innerHTML = '';
+      const isAdmin = ADMIN_ACCOUNTS.includes(loggedInUser);
 
       if (repliesArray.length === 0) {
-        feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses inside this thread module yet.</p>';
+        feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>';
         return;
       }
 
-      repliesArray.forEach(item => {
+      repliesArray.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'reply-card';
+        let deleteReplyBtn = isAdmin ? `<button class="admin-delete-btn" onclick="deleteReply(${index})">🗑️ Delete</button>` : '';
+        
         card.innerHTML = `
-          <div class="reply-header"><span>👤 ${escapeHTML(item.user)}</span> <span>🕒 ${item.time}</span></div>
-          <div class="reply-body">${escapeHTML(item.text)}</div>
+          <div class="thread-info">
+            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}</span> <span>🕒 ${item.time}</span></div>
+            <div class="reply-body">${escapeHTML(item.text)}</div>
+          </div>
+          ${deleteReplyBtn}
         `;
         feed.appendChild(card);
       });
     }
 
-    function submitReply() {
-      const user = document.getElementById('replyAuthor').value.trim();
-      const text = document.getElementById('replyText').value.trim();
+    function deleteReply(index) {
+      if (!confirm("Delete this reply?")) return;
+      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId);
+      if (!activeThread) return;
 
-      if (!user || !text) { alert("Enter both alias and response content!"); return; }
+      activeThread.replies.splice(index, 1);
+      localStorage.setItem('realmfall_inpvp_boards', JSON.stringify(threadsDatabase));
+      renderReplies(activeThread.replies);
+    }
+
+    function submitReply() {
+      const text = document.getElementById('replyText').value.trim();
+      if (!text) return;
 
       const activeThread = threadsDatabase.find(x => x.id === selectedThreadId);
       if (!activeThread) return;
 
       const newReply = {
-        user: user,
+        user: loggedInUser,
         text: text,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -272,18 +311,25 @@
       activeThread.replies.push(newReply);
       localStorage.setItem('realmfall_inpvp_boards', JSON.stringify(threadsDatabase));
 
-      document.getElementById('replyAuthor').value = '';
       document.getElementById('replyText').value = '';
       renderReplies(activeThread.replies);
+    }
+
+    function showNewThreadForm() {
+      document.getElementById('indexView').classList.add('hidden');
+      document.getElementById('createView').classList.remove('hidden');
+    }
+
+    function returnToDashboard() {
+      document.getElementById('createView').classList.add('hidden');
+      document.getElementById('channelView').classList.add('hidden');
+      document.getElementById('indexView').classList.remove('hidden');
+      renderThreadIndex();
     }
 
     function escapeHTML(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
-
-  <script defer src="/_vercel/insights/script.js"></script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
-
 </body>
 </html>
