@@ -84,7 +84,6 @@
     <header>
       <h1 id="headerLogo">Realmfall Central</h1>
       <div style="display: flex; gap: 15px; align-items: center;">
-        <!-- User Badge showing login status dynamically -->
         <span id="userBadge" style="font-size:14px; color: var(--text-muted); font-weight: bold;">🔍 Guest Mode (Read-Only)</span>
         <button id="loginBtn" class="action-btn" onclick="loginWithGitHub()">Sign In</button>
         <button id="logoutBtn" class="action-btn secondary hidden" onclick="logoutSession()">Sign Out</button>
@@ -98,7 +97,7 @@
       <div class="forum-feed" id="mainThreadFeed"></div>
     </div>
 
-    <!-- VIEW 2: TOPIC GENERATOR (UNLOCKED ONLY FOR LOGGED-IN USERS) -->
+    <!-- VIEW 2: TOPIC GENERATOR -->
     <div id="createView" class="view-panel hidden">
       <h2>Launch New Discussion Thread</h2>
       <div class="input-frame">
@@ -159,16 +158,13 @@
     let loggedInUser = null;
 
     window.addEventListener('DOMContentLoaded', async () => {
-      // 🔐 Check live user authorization states instantly
       const { data: { session } } = await supabaseClient.auth.getSession();
       
       if (session) {
-        // Securely fetch their genuine username credentials
         loggedInUser = session.user.user_metadata.user_name || session.user.email;
         document.getElementById('userBadge').innerText = `👤 Player: ${loggedInUser}`;
         document.getElementById('userBadge').style.color = "var(--neon-blue)";
         
-        // Show posting buttons and swap auth navigation toggles
         document.getElementById('loginBtn').classList.add('hidden');
         document.getElementById('logoutBtn').classList.remove('hidden');
         document.getElementById('globalActionBtn').classList.remove('hidden');
@@ -180,8 +176,8 @@
         {
           id: 1714092100000,
           author: "Admin_Core",
-          title: "Realmfall Forum Engine v1.0",
-          body: "Public reading is open to everyone. Sign in with your account parameters to submit logs or replies.",
+          title: "Welcome to the Realmfall Forum Node",
+          body: "Public reading is open to everyone. Sign in with your GitHub account parameters to submit logs, create topics, or reply to existing threads.",
           replies: [],
           time: "12:00 PM"
         }
@@ -190,7 +186,6 @@
     });
 
     async function loginWithGitHub() {
-      // Direct client-side authentication request loop
       await supabaseClient.auth.signInWithOAuth({ 
         provider: 'github',
         options: { redirectTo: window.location.href }
@@ -210,8 +205,6 @@
       threadsDatabase.forEach(item => {
         const row = document.createElement('div');
         row.className = 'thread-row';
-        
-        // Admin verification logic: delete button ONLY renders if user matches array keys
         let deleteBtnHtml = isAdmin ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete Thread</button>` : '';
 
         row.innerHTML = `
@@ -254,7 +247,7 @@
       };
 
       threadsDatabase.unshift(newTopic);
-      localStorage.setItem('realmfall_inpvp_boards', JSON.stringify(threadsDatabase));
+      localStorage.setItem('realmfall_threads_cache', JSON.stringify(threadsDatabase));
       
       document.getElementById('threadTitle').value = '';
       document.getElementById('threadContent').value = '';
@@ -349,5 +342,10 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
+
+  <!-- 📈 DATA ANALYTICS INJECTIONS -->
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
 </body>
 </html>
