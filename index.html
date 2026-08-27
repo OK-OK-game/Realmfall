@@ -14,6 +14,7 @@
       --border-glow: rgba(56, 189, 248, 0.12);
       --neon-blue: #38bdf8;
       --neon-red: #ef4444;
+      --neon-gold: #fbbf24;
       --text-bright: #f8fafc;
       --text-muted: #64748b;
     }
@@ -32,6 +33,7 @@
 
     h1 { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin: 0; color: #fff; }
     h2 { font-size: 20px; font-weight: 800; margin-top: 0; color: #fff; }
+    h3 { font-size: 18px; font-weight: 700; margin-top: 0; color: #fff; }
 
     .action-btn {
       background: #000; color: #fff; border: 1px solid var(--neon-blue);
@@ -43,6 +45,14 @@
     .action-btn.secondary { border-color: var(--text-muted); color: var(--text-muted); background: transparent; }
     .action-btn.secondary:hover { background: #1e293b; color: #fff; }
     
+    .action-btn.sponsor-gold { border-color: var(--neon-gold); color: var(--neon-gold); }
+    .action-btn.sponsor-gold:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px rgba(251,191,36,0.4); }
+
+    .sponsor-tag-badge {
+      color: var(--neon-gold); font-weight: 900; font-size: 12px; letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(251,191,36,0.6); margin-left: 6px;
+    }
+
     .admin-delete-btn {
       background: rgba(239, 68, 68, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red);
       padding: 6px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 4px;
@@ -53,6 +63,14 @@
     .view-panel { display: block; }
     .hidden { display: none !important; }
 
+    .sponsor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
+    .sponsor-card {
+      background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 10px;
+      text-align: center; border-top: 3px solid var(--neon-blue);
+    }
+    .sponsor-card.gold-tier { border-top-color: var(--neon-gold); }
+    .sponsor-price { font-size: 24px; font-weight: 900; margin: 15px 0; color: #fff; }
+
     .forum-feed { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
     .thread-row {
       background: var(--panel-glass); border: 1px solid var(--border-glow);
@@ -62,7 +80,7 @@
     .thread-row:hover { transform: translateY(-2px); border-color: var(--neon-blue); }
     .thread-info { flex-grow: 1; }
     .thread-title { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 6px; }
-    .thread-meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 15px; }
+    .thread-meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 15px; align-items: center; }
 
     .input-frame { max-width: 650px; background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
     .form-group { margin-bottom: 16px; }
@@ -84,12 +102,38 @@
       <div style="display: flex; gap: 15px; align-items: center;">
         <span id="syncStatus" style="font-size:13px; color: var(--neon-blue); font-weight: bold;">Connecting to Deno...</span>
         <span id="userRankBadge" style="font-size:13px; color: var(--text-muted); font-weight: bold;">🔍 Guest Mode</span>
+        <button class="action-btn sponsor-gold" onclick="showSponsorPanel()">✨ Sponsor Node</button>
         <button id="loginHeaderBtn" class="action-btn" onclick="showLoginPanel()">Sign In</button>
         <button id="logoutHeaderBtn" class="action-btn secondary hidden" onclick="executeLogout()">Sign Out</button>
         <button id="globalActionBtn" class="action-btn hidden" onclick="showNewThreadForm()">+ Create Thread</button>
       </div>
     </header>
 
+    <!-- VIEW -1: SPONSORSHIP PORTAL -->
+    <div id="sponsorPortalView" class="view-panel hidden">
+      <h2>🪙 Network Sponsorship Mainframe</h2>
+      <p style="color: var(--text-muted); margin-bottom: 25px;">Support the project servers to acquire distinct ranks or pin advertisement banners onto our mainframe grid.</p>
+      
+      <div class="sponsor-grid">
+        <div class="sponsor-card">
+          <h3>⚡ Core Supporter</h3>
+          <div class="sponsor-price">$4.99 / mo</div>
+          <p style="color: var(--text-muted); font-size: 14px; line-height: 1.4;">Unlocks a clean glowing gold [SPONSOR] badge right next to your profile gamertag on all forums.</p>
+        </div>
+        
+        <div class="sponsor-card gold-tier">
+          <h3>👑 Network Partner</h3>
+          <div class="sponsor-price">$14.99 / mo</div>
+          <p style="color: var(--text-muted); font-size: 14px; line-height: 1.4;">Grants full media ranks, pinned thread logs, and puts your custom text ad onto our game portal index layout.</p>
+        </div>
+      </div>
+      
+      <div class="input-frame" style="margin-top: 30px; text-align: center; max-width: 100%;">
+        <p style="margin-bottom: 15px;">Want to partner up or claim a slot? Click down below to copy our developer business communications mail buffer:</p>
+        <button class="action-btn" onclick="copySponsorMail()">📋 Copy Contact Information</button>
+        <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-left: 10px;">Back to Index</button>
+      </div>
+    </div>
     <!-- VIEW 0: SIGN-IN PORTAL -->
     <div id="loginPortalView" class="view-panel hidden">
       <h2>🔐 Account Portal Verification</h2>
@@ -137,7 +181,7 @@
       </div>
     </div>
 
-    <!-- VIEW 3: NESTED VIEW -->
+    <!-- VIEW 4: NESTED INTERFACE TOPIC MODULE -->
     <div id="channelView" class="view-panel hidden">
       <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
       <div class="thread-row" style="cursor:default; border-color:var(--neon-blue);">
@@ -169,6 +213,10 @@
     const ADMIN_ACCOUNTS = ["OK-OK-game", "babah-black-sheep"];
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
 
+    // 🪙 VERIFIED SERVER SPONSORS INDEX LIST
+    // Type your premium backers' exact GitHub names inside this array!
+    const VERIFIED_SPONSORS = ["sponsor-username-1", "test-player-name", "friend-account"];
+
     let threadsDatabase = [];
     let selectedThreadId = null;
     let currentSessionUser = null;
@@ -186,27 +234,18 @@
       setInterval(fetchDenoDatabase, 5000);
     });
 
-    function showLoginPanel() {
-      document.getElementById('indexView').classList.add('hidden');
-      document.getElementById('channelView').classList.add('hidden');
-      document.getElementById('createView').classList.add('hidden');
-      document.getElementById('loginPortalView').classList.remove('hidden');
-    }
+    function showLoginPanel() { hideAllPanels(); document.getElementById('loginPortalView').classList.remove('hidden'); }
+    function showSponsorPanel() { hideAllPanels(); document.getElementById('sponsorPortalView').classList.remove('hidden'); }
+    function copySponsorMail() { navigator.clipboard.writeText("sponsor@realmfallgame.com"); alert("Sponsorship team outreach mailbox copied!"); }
 
     function executeSecureLogin() {
       const user = document.getElementById('loginUsername').value.trim();
       const token = document.getElementById('loginToken').value.trim();
-
       if (!user || !token) { alert("Please complete both account entries!"); return; }
 
       if (ADMIN_ACCOUNTS.includes(user)) {
-        if (token === MASTER_ADMIN_PASSCODE) {
-          currentSessionUser = user;
-          currentSessionRank = "ADMIN";
-        } else {
-          alert("Security Error: Invalid Developer Master Token Passcode!");
-          return;
-        }
+        if (token === MASTER_ADMIN_PASSCODE) { currentSessionUser = user; currentSessionRank = "ADMIN"; } 
+        else { alert("Security Error: Invalid Developer Master Token Passcode!"); return; }
       } else {
         currentSessionUser = user;
         currentSessionRank = "PLAYER";
@@ -214,9 +253,6 @@
 
       localStorage.setItem('realmfall_active_user', currentSessionUser);
       localStorage.setItem('realmfall_active_rank', currentSessionRank);
-      document.getElementById('loginUsername').value = '';
-      document.getElementById('loginToken').value = '';
-      
       updateUIForActiveSession();
       returnToDashboard();
     }
@@ -229,11 +265,14 @@
 
     function updateUIForActiveSession() {
       const badge = document.getElementById('userRankBadge');
+      const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
+      let titlePrefix = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
+
       if (currentSessionRank === "ADMIN") {
-        badge.innerText = `👑 Admin: ${currentSessionUser}`;
+        badge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
         badge.style.color = "var(--neon-blue)";
       } else if (currentSessionRank === "PLAYER") {
-        badge.innerText = `👤 Player: ${currentSessionUser}`;
+        badge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
         badge.style.color = "#34d399";
       } else {
         badge.innerText = "🔍 Guest Mode";
@@ -247,6 +286,10 @@
         document.getElementById('replyFormContainer').classList.remove('hidden');
         document.getElementById('replyGuestWarning').classList.add('hidden');
       }
+    }
+
+    function getSponsorBadgeMarkup(authorName) {
+      return VERIFIED_SPONSORS.includes(authorName) ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
     }
     async function fetchDenoDatabase() {
       const status = document.getElementById('syncStatus');
@@ -269,7 +312,7 @@
         status.innerText = "⚡ Deno Cloud Active";
         status.style.color = "var(--neon-blue)";
         
-        if (document.getElementById('createView').classList.contains('hidden') && document.getElementById('loginPortalView').classList.contains('hidden')) {
+        if (document.getElementById('createView').classList.contains('hidden') && document.getElementById('loginPortalView').classList.contains('hidden') && document.getElementById('sponsorPortalView').classList.contains('hidden')) {
           if (!document.getElementById('channelView').classList.contains('hidden')) {
             const target = threadsDatabase.find(x => x.id === selectedThreadId);
             if (target) renderReplies(target.replies);
@@ -285,14 +328,8 @@
 
     async function uploadToDeno() {
       try {
-        await fetch(DENO_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ threads: threadsDatabase })
-        });
-      } catch (err) {
-        console.error("Cloud error:", err);
-      }
+        await fetch(DENO_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ threads: threadsDatabase }) });
+      } catch (err) { console.error("Cloud error:", err); }
     }
 
     function renderThreadIndex() {
@@ -309,7 +346,7 @@
           <div class="thread-info" onclick="openThreadChannel(${item.id})">
             <div class="thread-title">${escapeHTML(item.title)}</div>
             <div class="thread-meta">
-              <span>👤 Author: ${escapeHTML(item.author)}</span>
+              <span>👤 Author: ${escapeHTML(item.author)}${getSponsorBadgeMarkup(item.author)}</span>
               <span>💬 Replies: ${item.replies.length}</span>
               <span>🕒 Posted: ${item.time}</span>
             </div>
@@ -321,70 +358,49 @@
     }
 
     async function deleteThread(id, event) {
-      event.stopPropagation();
-      if (currentSessionRank !== "ADMIN") return;
+      event.stopPropagation(); if (currentSessionRank !== "ADMIN") return;
       if (!confirm("Wipe this topic thread permanently from Deno?")) return;
       threadsDatabase = threadsDatabase.filter(x => x.id !== id);
-      renderThreadIndex();
-      await uploadToDeno();
+      renderThreadIndex(); await uploadToDeno();
     }
 
     async function submitNewThread() {
       if (!currentSessionUser) return;
       const title = document.getElementById('threadTitle').value.trim();
       const body = document.getElementById('threadContent').value.trim();
-
       if (!title || !body) { alert("Fill out the forms completely!"); return; }
 
       const newTopic = {
-        id: Date.now(),
-        author: currentSessionUser,
-        title: title,
-        body: body,
-        replies: [],
+        id: Date.now(), author: currentSessionUser, title: title, body: body, replies: [],
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
       threadsDatabase.unshift(newTopic);
-      renderThreadIndex();
-      await uploadToDeno();
-      
-      document.getElementById('threadTitle').value = '';
-      document.getElementById('threadContent').value = '';
+      renderThreadIndex(); await uploadToDeno();
+      document.getElementById('threadTitle').value = ''; document.getElementById('threadContent').value = '';
       returnToDashboard();
     }
 
     function openThreadChannel(id) {
-      selectedThreadId = id;
-      const target = threadsDatabase.find(x => x.id === id);
-      if (!target) return;
-
-      document.getElementById('indexView').classList.add('hidden');
-      document.getElementById('channelView').classList.remove('hidden');
+      selectedThreadId = id; const target = threadsDatabase.find(x => x.id === id); if (!target) return;
+      hideAllPanels(); document.getElementById('channelView').classList.remove('hidden');
       document.getElementById('activeThreadTitle').innerText = target.title;
-      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}</span> <span>🕒 Time: ${target.time}</span>`;
+      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}${getSponsorBadgeMarkup(target.author)}</span> <span>🕒 Time: ${target.time}</span>`;
       document.getElementById('activeThreadBody').innerText = target.body;
       renderReplies(target.replies);
     }
 
     function renderReplies(repliesArray) {
-      const feed = document.getElementById('nestedReplyFeed');
-      feed.innerHTML = '';
+      const feed = document.getElementById('nestedReplyFeed'); feed.innerHTML = '';
       const isAdmin = (currentSessionRank === "ADMIN");
-
-      if (repliesArray.length === 0) {
-        feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>';
-        return;
-      }
+      if (repliesArray.length === 0) { feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>'; return; }
 
       repliesArray.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'reply-card';
+        const card = document.createElement('div'); card.className = 'reply-card';
         let deleteReplyBtn = isAdmin ? `<button class="admin-delete-btn" onclick="deleteReply(${index})">🗑️ Delete Reply</button>` : '';
-        
         card.innerHTML = `
           <div class="thread-info">
-            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}</span> <span>🕒 ${item.time}</span></div>
+            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}${getSponsorBadgeMarkup(item.user)}</span> <span>🕒 ${item.time}</span></div>
             <div class="reply-body">${escapeHTML(item.text)}</div>
           </div>
           ${deleteReplyBtn}
@@ -394,52 +410,28 @@
     }
 
     async function deleteReply(index) {
-      if (currentSessionRank !== "ADMIN") return;
-      if (!confirm("Delete this reply item?")) return;
-      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId);
-      if (!activeThread) return;
-
-      activeThread.replies.splice(index, 1);
-      renderReplies(activeThread.replies);
-      await uploadToDeno();
+      if (currentSessionRank !== "ADMIN") return; if (!confirm("Delete this reply item?")) return;
+      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
+      activeThread.replies.splice(index, 1); renderReplies(activeThread.replies); await uploadToDeno();
     }
 
     async function submitReply() {
-      if (!currentSessionUser) return;
-      const text = document.getElementById('replyText').value.trim();
-      if (!text) return;
+      if (!currentSessionUser) return; const text = document.getElementById('replyText').value.trim(); if (!text) return;
+      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
 
-      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId);
-      if (!activeThread) return;
-
-      const newReply = {
-        user: currentSessionUser,
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      activeThread.replies.push(newReply);
-      renderReplies(activeThread.replies);
-      await uploadToDeno();
+      const newReply = { user: currentSessionUser, text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+      activeThread.replies.push(newReply); renderReplies(activeThread.replies); await uploadToDeno();
       document.getElementById('replyText').value = '';
     }
 
-    function showNewThreadForm() {
-      document.getElementById('indexView').classList.add('hidden');
-      document.getElementById('createView').classList.remove('hidden');
+    function hideAllPanels() {
+      document.getElementById('indexView').classList.add('hidden'); document.getElementById('createView').classList.add('hidden');
+      document.getElementById('channelView').classList.add('hidden'); document.getElementById('loginPortalView').classList.add('hidden');
+      document.getElementById('sponsorPortalView').classList.add('hidden');
     }
 
-    function returnToDashboard() {
-      document.getElementById('createView').classList.add('hidden');
-      document.getElementById('channelView').classList.add('hidden');
-      document.getElementById('loginPortalView').classList.add('hidden');
-      document.getElementById('indexView').classList.remove('hidden');
-      renderThreadIndex();
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
+    function returnToDashboard() { hideAllPanels(); document.getElementById('indexView').classList.remove('hidden'); renderThreadIndex(); }
+    function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
   </script>
 
   <!-- 📈 DATA ANALYTICS INJECTIONS -->
