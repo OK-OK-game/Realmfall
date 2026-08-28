@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Realmfall Secure Forum Mainframe</title>
-  <!-- Load the Unblocked Supabase Auth CDN Engine -->
-  <script src="https://jsdelivr.net"></script>
   <style>
     /* 🌌 INPVP OBSIDIAN FORUM BRAND PARAMETERS */
     :root {
@@ -180,7 +178,6 @@
         </div>
       </div>
     </div>
-
     <!-- VIEW 4: NESTED INTERFACE TOPIC MODULE -->
     <div id="channelView" class="view-panel hidden">
       <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
@@ -206,6 +203,7 @@
       </div>
     </div>
   </div>
+
   <script>
     const DENO_URL = "https://deno.net";
     
@@ -214,7 +212,6 @@
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
 
     // 🪙 VERIFIED SERVER SPONSORS INDEX LIST
-    // Type your premium backers' exact GitHub names inside this array!
     const VERIFIED_SPONSORS = ["sponsor-username-1", "test-player-name", "friend-account"];
 
     let threadsDatabase = [];
@@ -297,7 +294,7 @@
         const response = await fetch(DENO_URL);
         threadsDatabase = await response.json();
         
-        if (threadsDatabase.length === 0) {
+        if (!threadsDatabase || threadsDatabase.length === 0) {
           threadsDatabase = [{
             id: 1714092100000,
             author: "System_Core",
