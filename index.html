@@ -46,21 +46,30 @@
     .action-btn.sponsor-gold { border-color: var(--neon-gold); color: var(--neon-gold); }
     .action-btn.sponsor-gold:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px rgba(251,191,36,0.4); }
 
-    /* 👑 Premium Glowing Crimson Owner Tag Style */
-    .owner-tag-badge {
-      color: var(--neon-red); font-weight: 900; font-size: 12px; letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(239, 68, 68, 0.8); margin-left: 6px;
+    /* 🎮 FEATURED GAME FEATURE CARD */
+    .game-showcase-panel {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(17, 24, 39, 0.8));
+      border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 25px;
+      margin-bottom: 30px; display: flex; gap: 25px; align-items: center;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); backdrop-filter: blur(8px);
     }
+    .game-photo-mock {
+      width: 140px; height: 140px; background: #0b1329;
+      border: 2px solid var(--neon-blue); border-radius: 10px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      font-size: 38px; color: var(--neon-blue); box-shadow: 0 0 20px rgba(56,189,248,0.15);
+    }
+    .game-details { flex-grow: 1; }
+    .game-tag-line { font-size: 13px; color: var(--neon-blue); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .game-main-title { font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
+    .game-summary-text { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin: 0 0 15px 0; max-width: 550px; }
 
-    .sponsor-tag-badge {
-      color: var(--neon-gold); font-weight: 900; font-size: 12px; letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(251,191,36,0.6); margin-left: 6px;
-    }
+    .owner-tag-badge { color: var(--neon-red); font-weight: 900; font-size: 12px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.8); margin-left: 6px; }
+    .sponsor-tag-badge { color: var(--neon-gold); font-weight: 900; font-size: 12px; text-shadow: 0 0 8px rgba(251,191,36,0.6); margin-left: 6px; }
 
     .admin-delete-btn {
       background: rgba(239, 68, 68, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red);
-      padding: 6px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 4px;
-      margin-left: auto; transition: 0.2s;
+      padding: 6px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-left: auto;
     }
     .admin-delete-btn:hover { background: var(--neon-red); color: #fff; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
 
@@ -68,20 +77,13 @@
     .hidden { display: none !important; }
 
     .sponsor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
-    .sponsor-card {
-      background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 10px;
-      text-align: center; border-top: 3px solid var(--neon-blue);
-    }
+    .sponsor-card { background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 10px; text-align: center; border-top: 3px solid var(--neon-blue); }
     .sponsor-card.gold-tier { border-top-color: var(--neon-gold); }
     .sponsor-price { font-size: 24px; font-weight: 900; margin: 15px 0; color: #fff; }
 
     .forum-feed { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-    .thread-row {
-      background: var(--panel-glass); border: 1px solid var(--border-glow);
-      padding: 20px; border-radius: 10px; cursor: pointer; display: flex; align-items: center;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .thread-row:hover { transform: translateY(-2px); border-color: var(--neon-blue); }
+    .thread-row { background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 20px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; }
+    .thread-row:hover { border-color: var(--neon-blue); }
     .thread-info { flex-grow: 1; }
     .thread-title { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 6px; }
     .thread-meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 15px; align-items: center; }
@@ -89,10 +91,7 @@
     .input-frame { max-width: 650px; background: var(--panel-glass); border: 1px solid var(--border-glow); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-weight: bold; font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
-    input[type="text"], input[type="password"], textarea {
-      width: 100%; padding: 12px; border: 1px solid var(--border-glow); border-radius: 6px;
-      font-size: 15px; box-sizing: border-box; background: #0b1329; color: #fff; font-family: inherit;
-    }
+    input[type="text"], input[type="password"], textarea { width: 100%; padding: 12px; border: 1px solid var(--border-glow); border-radius: 6px; background: #0b1329; color: #fff; font-family: inherit; box-sizing: border-box; }
     textarea { height: 90px; resize: vertical; }
 
     .nested-container { border-left: 2px solid var(--neon-blue); padding-left: 20px; margin-top: 25px; }
@@ -104,7 +103,6 @@
     <header>
       <h1 id="headerLogo">Realmfall Central</h1>
       <div style="display: flex; gap: 15px; align-items: center;">
-        <span id="syncStatus" style="font-size:13px; color: #34d399; font-weight: bold;">⚡ Matrix Core Active</span>
         <span id="userRankBadge" style="font-size:13px; color: var(--text-muted); font-weight: bold;">🔍 Guest Mode</span>
         <button class="action-btn sponsor-gold" onclick="showSponsorPanel()">✨ Sponsor Node</button>
         <button id="loginHeaderBtn" class="action-btn" onclick="showLoginPanel()">Sign In</button>
@@ -113,111 +111,111 @@
       </div>
     </header>
 
-    <!-- VIEW -1: SPONSORSHIP PORTAL -->
-    <div id="sponsorPortalView" class="view-panel hidden">
-      <h2>🪙 Network Sponsorship Mainframe</h2>
-      <p style="color: var(--text-muted); margin-bottom: 25px;">Support the project servers to acquire distinct ranks or pin advertisement banners onto our mainframe grid.</p>
-      
-      <div class="sponsor-grid">
-        <div class="sponsor-card">
-          <h3>⚡ Core Supporter</h3>
-          <div class="sponsor-price">$4.99 / mo</div>
-          <p style="color: var(--text-muted); font-size: 14px; line-height: 1.4;">Unlocks a clean glowing gold [SPONSOR] badge right next to your profile gamertag on all forums.</p>
-        </div>
-        
-        <div class="sponsor-card gold-tier">
-          <h3>👑 Network Partner</h3>
-          <div class="sponsor-price">$14.99 / mo</div>
-          <p style="color: var(--text-muted); font-size: 14px; line-height: 1.4;">Grants full media ranks, pinned thread logs, and puts your custom text ad onto our game portal index layout.</p>
-        </div>
-      </div>
-      
-      <div class="input-frame" style="margin-top: 30px; text-align: center; max-width: 100%;">
-        <p style="margin-bottom: 15px;">Want to partner up or claim a slot? Click down below to copy our developer business communications mail buffer:</p>
-        <button class="action-btn" onclick="copySponsorMail()">📋 Copy Contact Information</button>
-        <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-left: 10px;">Back to Index</button>
-      </div>
-    </div>
-    <!-- VIEW 0: SIGN-IN PORTAL -->
-    <div id="loginPortalView" class="view-panel hidden">
-      <h2>🔐 Account Portal Verification</h2>
-      <p style="color: var(--text-muted); margin-bottom: 20px;">Sign in with your credentials to unlock text publishing permissions.</p>
-      <div class="input-frame">
-        <div class="form-group">
-          <label>GitHub Account Username</label>
-          <input type="text" id="loginUsername" placeholder="Enter your official GitHub name...">
-        </div>
-        <div class="form-group">
-          <label>Security Key Token Passcode</label>
-          <input type="password" id="loginToken" placeholder="Enter custom account code...">
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="action-btn" onclick="executeSecureLogin()">Verify Account</button>
-          <button class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- VIEW 1: INDEX BOARD -->
+    <!-- VIEW 1: HOME HUB -->
     <div id="indexView" class="view-panel">
+      
+      <!-- 🏨 HIGH-PERFORMANCE HOTEL TYCOON IDLE BUTTON MODULE -->
+      <div class="game-showcase-panel">
+        <div class="game-photo-mock">🏢🏨</div>
+        <div class="game-details">
+          <div class="game-tag-line">🎮 Live on GD.Games</div>
+          <h2 class="game-main-title">Hotel Tycoon Idle</h2>
+          <p class="game-summary-text">Build your hospitality empire, balance processing logistics, and manage server updates live inside this premium tycoon simulation module designed by OK-OK-game.</p>
+          <button class="action-btn" onclick="window.open('https://gd.games', '_blank')">🚀 Go to Game</button>
+        </div>
+      </div>
+
       <h2>Active Discussion Boards</h2>
       <div class="forum-feed" id="mainThreadFeed"></div>
     </div>
 
-    <!-- VIEW 2: TOPIC GENERATOR -->
-    <div id="createView" class="view-panel hidden">
-      <h2>Launch New Discussion Thread</h2>
+    <!-- SPONSOR PANELS -->
+    <div id="sponsorPortalView" class="view-panel hidden">
+      <h2>🪙 Network Sponsorship Mainframe</h2>
+      <div class="sponsor-grid">
+        <div class="sponsor-card">
+          <h3>⚡ Core Supporter</h3>
+          <div class="sponsor-price">$4.99 / mo</div>
+          <p style="color: var(--text-muted); font-size: 14px;">Unlocks a gold [SPONSOR] badge right next to your profile gamertag.</p>
+        </div>
+        <div class="sponsor-card gold-tier">
+          <h3>👑 Network Partner</h3>
+          <div class="sponsor-price">$14.99 / mo</div>
+          <p style="color: var(--text-muted); font-size: 14px;">Grants media ranks, pinned thread logs, and custom ad space slots.</p>
+        </div>
+      </div>
+      <div class="input-frame" style="margin-top: 30px; text-align: center; max-width: 100%;">
+        <button class="action-btn" onclick="copySponsorMail()">📋 Copy Contact Mail</button>
+        <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-left: 10px;">Back</button>
+      </div>
+    </div>
+    <!-- LOGIN VIEW -->
+    <div id="loginPortalView" class="view-panel hidden">
+      <h2>🔐 Account Portal Verification</h2>
       <div class="input-frame">
         <div class="form-group">
+          <label>GitHub Account Username</label>
+          <input type="text" id="loginUsername" placeholder="Enter name...">
+        </div>
+        <div class="form-group">
+          <label>Security Key Passcode</label>
+          <input type="password" id="loginToken" placeholder="Enter passcode...">
+        </div>
+        <button class="action-btn" onclick="executeSecureLogin()">Verify Account</button>
+        <button class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- NEW THREAD CREATOR -->
+    <div id="createView" class="view-panel hidden">
+      <h2>Launch New Discussion Thread</h2>
+      <!-- 🛠️ PREVENTION REPAIR: Prevents form reload drop bugs inside iOS Safari -->
+      <form onsubmit="submitNewThread(event)" class="input-frame">
+        <div class="form-group">
           <label>Thread Topic Header Title</label>
-          <input type="text" id="threadTitle" placeholder="What is this discussion about?">
+          <input type="text" id="threadTitle" placeholder="What is this discussion about?" required>
         </div>
         <div class="form-group">
           <label>Opening Message Statement</label>
-          <textarea id="threadContent" placeholder="Describe your topic details or server report..."></textarea>
+          <textarea id="threadContent" placeholder="Describe your topic details..." required></textarea>
         </div>
-        <div style="display:flex; gap:10px;">
-          <button class="action-btn" onclick="submitNewThread()">Publish Thread</button>
-          <button class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" class="action-btn">Publish Thread</button>
+          <button type="button" class="action-btn secondary" onclick="returnToDashboard()">Cancel</button>
         </div>
-      </div>
+      </form>
     </div>
-    <!-- VIEW 3: NESTED INTERFACE TOPIC MODULE -->
+
+    <!-- EXPANDED DISCUSSION BOARD ROOM -->
     <div id="channelView" class="view-panel hidden">
       <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
-      <div class="thread-row" style="cursor:default; border-color:var(--neon-blue);">
+      <div class="thread-row" style="cursor:default;">
         <div class="thread-info">
           <div id="activeThreadTitle" class="thread-title" style="font-size:22px;"></div>
           <div id="activeThreadMeta" class="thread-meta"></div>
-          <p id="activeThreadBody" style="line-height:1.6; margin-top:15px; color:#cbd5e1; font-size:16px; white-space:pre-wrap;"></p>
+          <p id="activeThreadBody" style="line-height:1.6; margin-top:15px; color:#cbd5e1; white-space:pre-wrap;"></p>
         </div>
       </div>
-
       <div class="nested-container">
         <h3>Replies & Comments</h3>
-        <div id="replyFormContainer" class="input-frame hidden" style="padding:15px; margin-bottom:20px;">
+        <form onsubmit="submitReply(event)" id="replyFormContainer" class="input-frame hidden" style="padding:15px; margin-bottom:20px;">
           <div class="form-group">
             <label>Comment Message</label>
-            <textarea id="replyText" style="height:60px;" placeholder="Add to the discussion thread..."></textarea>
+            <textarea id="replyText" style="height:60px;" placeholder="Add to the thread..." required></textarea>
           </div>
-          <button class="action-btn" onclick="submitReply()">Submit Reply</button>
-        </div>
-        <p id="replyGuestWarning" style="color: var(--text-muted); font-style: italic; margin-bottom: 20px;">⚠️ You must Sign In using your account credentials at the top header menu to reply to this thread.</p>
+          <button type="submit" class="action-btn">Submit Reply</button>
+        </form>
+        <p id="replyGuestWarning" style="color: var(--text-muted); font-style: italic;">⚠️ Sign in to leave a reply on this thread.</p>
         <div id="nestedReplyFeed"></div>
       </div>
     </div>
   </div>
-
   <script>
-    // 🛡️ SECURITY PERMISSIONS MATRIX
     const MASTER_OWNER_ACCOUNT = "OK-OK-game";
-    const MASTER_OWNER_CODE = "1234"; // Your new custom secure owner passcode!
-    
+    const MASTER_OWNER_CODE = "1234"; // Your secure owner code
     const ADMIN_ACCOUNTS = ["babah-black-sheep"];
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
-
-    // 🪙 VERIFIED SERVER SPONSORS INDEX LIST
-    const VERIFIED_SPONSORS = ["sponsor-username-1", "test-player-name", "friend-account"];
+    const VERIFIED_SPONSORS = ["sponsor-username-1", "test-player-name"];
 
     let threadsDatabase = [];
     let selectedThreadId = null;
@@ -232,64 +230,37 @@
         currentSessionRank = cachedRank;
       }
       
-      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_threads'));
-      if (!threadsDatabase || threadsDatabase.length === 0) {
-        threadsDatabase = [{
-          id: 1714092100000,
-          author: "System_Core",
-          title: "Welcome to the Realmfall Forum Engine",
-          body: "Network operational. Sign in with your username credentials to create fresh discussion threads or reply to posts.",
-          replies: [],
-          time: "12:00 PM"
-        }];
-        localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
-      }
-
+      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_data')) || [{
+        id: 1714092100000,
+        author: "System_Core",
+        title: "Welcome to the Realmfall Matrix Portal",
+        body: "Forum matrix is online and fully unblocked. Sign in above using your credentials to post threads or answers.",
+        replies: [],
+        time: "12:00 PM"
+      }];
+      
       updateUIForActiveSession();
       renderThreadIndex();
     });
 
     function showLoginPanel() { hideAllPanels(); document.getElementById('loginPortalView').classList.remove('hidden'); }
     function showSponsorPanel() { hideAllPanels(); document.getElementById('sponsorPortalView').classList.remove('hidden'); }
-    function copySponsorMail() { navigator.clipboard.writeText("sponsor@realmfallgame.com"); alert("Sponsorship team outreach mailbox copied!"); }
+    function copySponsorMail() { navigator.clipboard.writeText("sponsor@realmfallgame.com"); alert("Contact copied!"); }
 
     function executeSecureLogin() {
       const user = document.getElementById('loginUsername').value.trim();
       const token = document.getElementById('loginToken').value.trim();
-      if (!user || !token) { alert("Please complete both account entries!"); return; }
+      if (!user || !token) { alert("Complete both fields!"); return; }
 
-      // 👑 OWNER LOGIN GATE LANE
-      if (user === MASTER_OWNER_ACCOUNT) {
-        if (token === MASTER_OWNER_CODE) {
-          currentSessionUser = user;
-          currentSessionRank = "OWNER";
-        } else {
-          alert("Security Error: Invalid Owner Master Passcode!");
-          return;
-        }
-      }
-      // 🛡️ ADMIN LOGIN LANE
-      else if (ADMIN_ACCOUNTS.includes(user)) {
-        if (token === MASTER_ADMIN_PASSCODE) { 
-          currentSessionUser = user; 
-          currentSessionRank = "ADMIN"; 
-        } else { 
-          alert("Security Error: Invalid Admin Passcode!"); 
-          return; 
-        }
-      } 
-      // 👤 STANDARD PLAYER LOGIN LANE
-      else {
-        currentSessionUser = user;
-        currentSessionRank = "PLAYER";
-      }
+      if (user === MASTER_OWNER_ACCOUNT && token === MASTER_OWNER_CODE) { currentSessionUser = user; currentSessionRank = "OWNER"; }
+      else if (ADMIN_ACCOUNTS.includes(user) && token === MASTER_ADMIN_PASSCODE) { currentSessionUser = user; currentSessionRank = "ADMIN"; }
+      else { currentSessionUser = user; currentSessionRank = "PLAYER"; }
 
       localStorage.setItem('realmfall_active_user', currentSessionUser);
       localStorage.setItem('realmfall_active_rank', currentSessionRank);
-      updateUIForActiveSession();
-      renderThreadIndex();
-      returnToDashboard();
+      window.location.reload();
     }
+
     function executeLogout() {
       localStorage.removeItem('realmfall_active_user');
       localStorage.removeItem('realmfall_active_rank');
@@ -299,23 +270,12 @@
     function updateUIForActiveSession() {
       const badge = document.getElementById('userRankBadge');
       if (!badge) return;
-      
       const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
-      let sponsorMarkup = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
+      let sMark = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
 
-      if (currentSessionRank === "OWNER") {
-        badge.innerHTML = `👑 Owner: ${currentSessionUser} <span class='owner-tag-badge'>[OWNER]</span>${sponsorMarkup}`;
-        badge.style.color = "var(--neon-red)";
-      } else if (currentSessionRank === "ADMIN") {
-        badge.innerHTML = `🛡️ Admin: ${currentSessionUser}${sponsorMarkup}`;
-        badge.style.color = "var(--neon-blue)";
-      } else if (currentSessionRank === "PLAYER") {
-        badge.innerHTML = `👤 Player: ${currentSessionUser}${sponsorMarkup}`;
-        badge.style.color = "#34d399";
-      } else {
-        badge.innerText = "🔍 Guest Mode";
-        badge.style.color = "var(--text-muted)";
-      }
+      if (currentSessionRank === "OWNER") { badge.innerHTML = `👑 Owner: ${currentSessionUser} <span class='owner-tag-badge'>[OWNER]</span>${sMark}`; badge.style.color = "var(--neon-red)"; }
+      else if (currentSessionRank === "ADMIN") { badge.innerHTML = `🛡️ Admin: ${currentSessionUser}${sMark}`; badge.style.color = "var(--neon-blue)"; }
+      else if (currentSessionRank === "PLAYER") { badge.innerHTML = `👤 Player: ${currentSessionUser}${sMark}`; badge.style.color = "#34d399"; }
 
       if (currentSessionUser) {
         document.getElementById('loginHeaderBtn').classList.add('hidden');
@@ -326,68 +286,49 @@
       }
     }
 
-    function getRankTagBadgeMarkup(authorName) {
-      if (authorName === MASTER_OWNER_ACCOUNT) return " <span class='owner-tag-badge'>[OWNER]</span>";
-      if (VERIFIED_SPONSORS.includes(authorName)) return " <span class='sponsor-tag-badge'>[SPONSOR]</span>";
+    function getTags(name) {
+      if (name === MASTER_OWNER_ACCOUNT) return " <span class='owner-tag-badge'>[OWNER]</span>";
+      if (VERIFIED_SPONSORS.includes(name)) return " <span class='sponsor-tag-badge'>[SPONSOR]</span>";
       return "";
     }
 
     function renderThreadIndex() {
-      const feed = document.getElementById('mainThreadFeed');
-      if (!feed) return;
-      feed.innerHTML = '';
-      const hasDeletePowers = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
+      const feed = document.getElementById('mainThreadFeed'); if (!feed) return; feed.innerHTML = '';
+      const canDelete = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
 
       threadsDatabase.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'thread-row';
-        let deleteBtnHtml = hasDeletePowers ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete Thread</button>` : '';
-
+        const row = document.createElement('div'); row.className = 'thread-row';
+        let delBtn = canDelete ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete</button>` : '';
         row.innerHTML = `
           <div class="thread-info" onclick="openThreadChannel(${item.id})">
             <div class="thread-title">${escapeHTML(item.title)}</div>
-            <div class="thread-meta">
-              <span>👤 Author: ${escapeHTML(item.author)}${getRankTagBadgeMarkup(item.author)}</span>
-              <span>💬 Replies: ${item.replies ? item.replies.length : 0}</span>
-              <span>🕒 Posted: ${item.time}</span>
-            </div>
-          </div>
-          ${deleteBtnHtml}
-        `;
+            <div class="thread-meta"><span>👤 ${escapeHTML(item.author)}${getTags(item.author)}</span> <span>💬 Replies: ${item.replies ? item.replies.length : 0}</span></div>
+          </div>${delBtn}`;
         feed.appendChild(row);
       });
     }
 
     function deleteThread(id, event) {
-      event.stopPropagation(); 
-      if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return;
-      if (!confirm("Wipe this topic thread permanently?")) return;
+      event.stopPropagation(); if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return;
       threadsDatabase = threadsDatabase.filter(x => x.id !== id);
-      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
       renderThreadIndex();
     }
 
-    function submitNewThread() {
-      if (!currentSessionUser) { alert("Please sign in first!"); return; }
+    // 🛠️ SUBMISSION REPAIR: Locks data inside cache before Safari drops the context matrix
+    function submitNewThread(event) {
+      if (event) event.preventDefault();
       const title = document.getElementById('threadTitle').value.trim();
       const body = document.getElementById('threadContent').value.trim();
-      if (!title || !body) { alert("Please fill out all fields!"); return; }
+      if (!title || !body) { alert("Fill all fields!"); return; }
 
-      const newTopic = {
-        id: Date.now(),
-        author: currentSessionUser,
-        title: title,
-        body: body,
-        replies: [],
+      threadsDatabase.unshift({
+        id: Date.now(), author: currentSessionUser, title: title, body: body, replies: [],
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      threadsDatabase.unshift(newTopic);
-      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      });
       
-      document.getElementById('threadTitle').value = ''; 
-      document.getElementById('threadContent').value = '';
-      
+      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      document.getElementById('threadTitle').value = ''; document.getElementById('threadContent').value = '';
       returnToDashboard();
     }
 
@@ -395,48 +336,40 @@
       selectedThreadId = id; const target = threadsDatabase.find(x => x.id === id); if (!target) return;
       hideAllPanels(); document.getElementById('channelView').classList.remove('hidden');
       document.getElementById('activeThreadTitle').innerText = target.title;
-      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}${getRankTagBadgeMarkup(target.author)}</span> <span>🕒 Time: ${target.time}</span>`;
+      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 By: ${target.author}${getTags(target.author)}</span>`;
       document.getElementById('activeThreadBody').innerText = target.body;
       renderReplies(target.replies || []);
     }
 
-    function renderReplies(repliesArray) {
+    function renderReplies(arr) {
       const feed = document.getElementById('nestedReplyFeed'); if (!feed) return; feed.innerHTML = '';
-      const hasDeletePowers = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
-      if (repliesArray.length === 0) { feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>'; return; }
+      const canDelete = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
+      if (arr.length === 0) { feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No replies yet.</p>'; return; }
 
-      repliesArray.forEach((item, index) => {
+      arr.forEach((item, idx) => {
         const card = document.createElement('div'); card.className = 'reply-card';
-        let deleteReplyBtn = hasDeletePowers ? `<button class="admin-delete-btn" onclick="deleteReply(${index})">🗑️ Delete Reply</button>` : '';
-        card.innerHTML = `
-          <div class="thread-info">
-            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}${getRankTagBadgeMarkup(item.user)}</span> <span>🕒 ${item.time}</span></div>
-            <div class="reply-body">${escapeHTML(item.text)}</div>
-          </div>
-          ${deleteReplyBtn}
-        `;
+        let del = canDelete ? `<button class="admin-delete-btn" onclick="deleteReply(${idx})">🗑️ Delete</button>` : '';
+        card.innerHTML = `<div class="thread-info"><div class="reply-header"><span>👤 ${escapeHTML(item.user)}${getTags(item.user)}</span></div><div class="reply-body">${escapeHTML(item.text)}</div></div>${del}`;
         feed.appendChild(card);
       });
     }
 
-    function deleteReply(index) {
-      if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return; 
-      if (!confirm("Delete reply?")) return;
-      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
-      activeThread.replies.splice(index, 1);
-      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
-      renderReplies(activeThread.replies);
+    function deleteReply(idx) {
+      const target = threadsDatabase.find(x => x.id === selectedThreadId); if (!target) return;
+      target.replies.splice(idx, 1);
+      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      renderReplies(target.replies);
     }
 
-    function submitReply() {
-      if (!currentSessionUser) return; const text = document.getElementById('replyText').value.trim(); if (!text) return;
-      const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
-      if (!activeThread.replies) activeThread.replies = [];
-
-      const newReply = { user: currentSessionUser, text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-      activeThread.replies.push(newReply);
-      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
-      renderReplies(activeThread.replies);
+    function submitReply(event) {
+      if (event) event.preventDefault();
+      const text = document.getElementById('replyText').value.trim(); if (!text) return;
+      const target = threadsDatabase.find(x => x.id === selectedThreadId); if (!target) return;
+      if (!target.replies) target.replies = [];
+      
+      target.replies.push({ user: currentSessionUser, text: text });
+      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      renderReplies(target.replies);
       document.getElementById('replyText').value = '';
     }
 
@@ -445,9 +378,14 @@
       document.getElementById('channelView').classList.add('hidden'); document.getElementById('loginPortalView').classList.add('hidden');
       document.getElementById('sponsorPortalView').classList.add('hidden');
     }
-
+    function showNewThreadForm() { hideAllPanels(); document.getElementById('createView').classList.remove('hidden'); }
     function returnToDashboard() { hideAllPanels(); document.getElementById('indexView').classList.remove('hidden'); renderThreadIndex(); }
     function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
   </script>
+
+  <!-- 📈 DATA ANALYTICS INJECTIONS -->
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
 </body>
 </html>
