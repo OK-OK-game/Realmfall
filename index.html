@@ -98,7 +98,7 @@
     <header>
       <h1 id="headerLogo">Realmfall Central</h1>
       <div style="display: flex; gap: 15px; align-items: center;">
-        <span id="syncStatus" style="font-size:13px; color: var(--neon-blue); font-weight: bold;">⚡ Local Hybrid Mode</span>
+        <span id="syncStatus" style="font-size:13px; color: #34d399; font-weight: bold;">⚡ Matrix Core Active</span>
         <span id="userRankBadge" style="font-size:13px; color: var(--text-muted); font-weight: bold;">🔍 Guest Mode</span>
         <button class="action-btn sponsor-gold" onclick="showSponsorPanel()">✨ Sponsor Node</button>
         <button id="loginHeaderBtn" class="action-btn" onclick="showLoginPanel()">Sign In</button>
@@ -155,9 +155,7 @@
     <!-- VIEW 1: INDEX BOARD -->
     <div id="indexView" class="view-panel">
       <h2>Active Discussion Boards</h2>
-      <div class="forum-feed" id="mainThreadFeed">
-        <p style="color: var(--text-muted); font-style: italic;">Fetching cloud data streams...</p>
-      </div>
+      <div class="forum-feed" id="mainThreadFeed"></div>
     </div>
 
     <!-- VIEW 2: TOPIC GENERATOR -->
@@ -178,7 +176,7 @@
         </div>
       </div>
     </div>
-    <!-- VIEW 4: NESTED INTERFACE TOPIC MODULE -->
+    <!-- VIEW 3: NESTED INTERFACE TOPIC MODULE -->
     <div id="channelView" class="view-panel hidden">
       <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-bottom:20px;">← Back to Index</button>
       <div class="thread-row" style="cursor:default; border-color:var(--neon-blue);">
@@ -205,8 +203,6 @@
   </div>
 
   <script>
-    const DENO_URL = "https://deno.net";
-    
     // 🛡️ SECURITY PERMISSIONS MATRIX
     const ADMIN_ACCOUNTS = ["OK-OK-game", "babah-black-sheep"];
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
@@ -225,10 +221,24 @@
       if (cachedUser && cachedRank) {
         currentSessionUser = cachedUser;
         currentSessionRank = cachedRank;
-        updateUIForActiveSession();
       }
-      fetchDenoDatabase();
-      setInterval(fetchDenoDatabase, 4000);
+      
+      // Load from clean hybrid local matrix cache storage instantly
+      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_threads'));
+      if (!threadsDatabase || threadsDatabase.length === 0) {
+        threadsDatabase = [{
+          id: 1714092100000,
+          author: "System_Core",
+          title: "Welcome to the Realmfall Forum Engine",
+          body: "Network operational. Sign in with your username credentials to create fresh discussion threads or reply to posts.",
+          replies: [],
+          time: "12:00 PM"
+        }];
+        localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      }
+
+      updateUIForActiveSession();
+      renderThreadIndex();
     });
 
     function showLoginPanel() { hideAllPanels(); document.getElementById('loginPortalView').classList.remove('hidden'); }
@@ -251,9 +261,9 @@
       localStorage.setItem('realmfall_active_user', currentSessionUser);
       localStorage.setItem('realmfall_active_rank', currentSessionRank);
       updateUIForActiveSession();
+      renderThreadIndex();
       returnToDashboard();
     }
-
     function executeLogout() {
       localStorage.removeItem('realmfall_active_user');
       localStorage.removeItem('realmfall_active_rank');
@@ -262,25 +272,25 @@
 
     function updateUIForActiveSession() {
       const badge = document.getElementById('userRankBadge');
+      if (!badge) return;
+      
       const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
       let titlePrefix = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
 
-      if (badge) {
-        if (currentSessionRank === "ADMIN") {
-          badge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
-          badge.style.color = "var(--neon-blue)";
-        } else if (currentSessionRank === "PLAYER") {
-          badge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
-          badge.style.color = "#34d399";
-        } else {
-          badge.innerText = "🔍 Guest Mode";
-          badge.style.color = "var(--text-muted)";
-        }
+      if (currentSessionRank === "ADMIN") {
+        badge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
+        badge.style.color = "var(--neon-blue)";
+      } else if (currentSessionRank === "PLAYER") {
+        badge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
+        badge.style.color = "#34d399";
+      } else {
+        badge.innerText = "🔍 Guest Mode";
+        badge.style.color = "var(--text-muted)";
       }
 
       if (currentSessionUser) {
         document.getElementById('loginHeaderBtn').classList.add('hidden');
-        if(document.getElementById('logoutHeaderBtn')) document.getElementById('logoutHeaderBtn').classList.remove('hidden');
+        document.getElementById('logoutHeaderBtn').classList.remove('hidden');
         document.getElementById('globalActionBtn').classList.remove('hidden');
         document.getElementById('replyFormContainer').classList.remove('hidden');
         document.getElementById('replyGuestWarning').classList.add('hidden');
@@ -289,61 +299,6 @@
 
     function getSponsorBadgeMarkup(authorName) {
       return VERIFIED_SPONSORS.includes(authorName) ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
-    }
-    async function fetchDenoDatabase() {
-      const status = document.getElementById('syncStatus');
-      try {
-        const response = await fetch(DENO_URL);
-        const data = await response.json();
-        
-        if (data && Array.isArray(data)) {
-          threadsDatabase = data;
-        } else if (data && data.threads) {
-          threadsDatabase = data.threads;
-        }
-      } catch (err) {
-        console.log("Using fail-safe engine layer");
-      }
-
-      // Hybrid Storage Logic: Fallback to local matrix if server is fresh
-      if (!threadsDatabase || threadsDatabase.length === 0) {
-        threadsDatabase = JSON.parse(localStorage.getItem('realmfall_backup_threads')) || [{
-          id: 1714092100000,
-          author: "System_Core",
-          title: "Realmfall Forum Matrix Live",
-          body: "Network channels operational. Sign in to post new topics or reply.",
-          replies: [],
-          time: "12:00 PM"
-        }];
-      }
-
-      if (status) {
-        status.innerText = "⚡ Forum Matrix Live";
-        status.style.color = "#34d399";
-      }
-      
-      if (document.getElementById('createView').classList.contains('hidden') && document.getElementById('loginPortalView').classList.contains('hidden') && document.getElementById('sponsorPortalView').classList.contains('hidden')) {
-        if (!document.getElementById('channelView').classList.contains('hidden')) {
-          const target = threadsDatabase.find(x => x.id === selectedThreadId);
-          if (target) renderReplies(target.replies || []);
-        } else {
-          renderThreadIndex();
-        }
-      }
-    }
-
-    async function uploadToDeno() {
-      // Sync seamlessly to both Local Cache and Deno Server Cloud
-      localStorage.setItem('realmfall_backup_threads', JSON.stringify(threadsDatabase));
-      try {
-        await fetch(DENO_URL, { 
-          method: "POST", 
-          headers: { "Content-Type": "application/json" }, 
-          body: JSON.stringify({ threads: threadsDatabase }) 
-        });
-      } catch (err) { 
-        console.log("Saved safely to local matrix pool."); 
-      }
     }
 
     function renderThreadIndex() {
@@ -372,14 +327,15 @@
       });
     }
 
-    async function deleteThread(id, event) {
+    function deleteThread(id, event) {
       event.stopPropagation(); if (currentSessionRank !== "ADMIN") return;
-      if (!confirm("Delete this thread?")) return;
+      if (!confirm("Wipe this topic thread permanently?")) return;
       threadsDatabase = threadsDatabase.filter(x => x.id !== id);
-      renderThreadIndex(); await uploadToDeno();
+      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      renderThreadIndex();
     }
 
-    async function submitNewThread() {
+    function submitNewThread() {
       if (!currentSessionUser) { alert("Please sign in first!"); return; }
       const title = document.getElementById('threadTitle').value.trim();
       const body = document.getElementById('threadContent').value.trim();
@@ -395,11 +351,11 @@
       };
 
       threadsDatabase.unshift(newTopic);
-      renderThreadIndex(); 
-      await uploadToDeno();
+      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
       
       document.getElementById('threadTitle').value = ''; 
       document.getElementById('threadContent').value = '';
+      
       returnToDashboard();
     }
 
@@ -431,19 +387,23 @@
       });
     }
 
-    async function deleteReply(index) {
+    function deleteReply(index) {
       if (currentSessionRank !== "ADMIN") return; if (!confirm("Delete reply?")) return;
       const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
-      activeThread.replies.splice(index, 1); renderReplies(activeThread.replies); await uploadToDeno();
+      activeThread.replies.splice(index, 1);
+      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      renderReplies(activeThread.replies);
     }
 
-    async function submitReply() {
+    function submitReply() {
       if (!currentSessionUser) return; const text = document.getElementById('replyText').value.trim(); if (!text) return;
       const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
       if (!activeThread.replies) activeThread.replies = [];
 
       const newReply = { user: currentSessionUser, text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-      activeThread.replies.push(newReply); renderReplies(activeThread.replies); await uploadToDeno();
+      activeThread.replies.push(newReply);
+      localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
+      renderReplies(activeThread.replies);
       document.getElementById('replyText').value = '';
     }
 
