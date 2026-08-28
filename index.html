@@ -265,15 +265,18 @@
       const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
       let titlePrefix = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
 
-      if (currentSessionRank === "ADMIN") {
-        badge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
-        badge.style.color = "var(--neon-blue)";
-      } else if (currentSessionRank === "PLAYER") {
-        badge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
-        badge.style.color = "#34d399";
-      } else {
-        badge.innerText = "🔍 Guest Mode";
-        badge.style.color = "var(--text-muted)";
+      if (document.getElementById('userRankBadge')) {
+        const uiBadge = document.getElementById('userRankBadge');
+        if (currentSessionRank === "ADMIN") {
+          uiBadge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
+          uiBadge.style.color = "var(--neon-blue)";
+        } else if (currentSessionRank === "PLAYER") {
+          uiBadge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
+          uiBadge.style.color = "#34d399";
+        } else {
+          uiBadge.innerText = "🔍 Guest Mode";
+          uiBadge.style.color = "var(--text-muted)";
+        }
       }
 
       if (currentSessionUser) {
@@ -292,8 +295,15 @@
       const status = document.getElementById('syncStatus');
       try {
         const response = await fetch(DENO_URL);
-        threadsDatabase = await response.json();
+        const data = await response.json();
         
+        // Match matrix parameters to ensure array layers exist cleanly
+        if (data && Array.isArray(data)) {
+          threadsDatabase = data;
+        } else if (data && data.threads) {
+          threadsDatabase = data.threads;
+        }
+
         if (!threadsDatabase || threadsDatabase.length === 0) {
           threadsDatabase = [{
             id: 1714092100000,
@@ -325,12 +335,17 @@
 
     async function uploadToDeno() {
       try {
-        await fetch(DENO_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ threads: threadsDatabase }) });
+        await fetch(DENO_URL, { 
+          method: "POST", 
+          headers: { "Content-Type": "application/json" }, 
+          body: JSON.stringify({ threads: threadsDatabase }) 
+        });
       } catch (err) { console.error("Cloud error:", err); }
     }
 
     function renderThreadIndex() {
       const feed = document.getElementById('mainThreadFeed');
+      if (!feed) return;
       feed.innerHTML = '';
       const isAdmin = (currentSessionRank === "ADMIN");
 
@@ -344,7 +359,7 @@
             <div class="thread-title">${escapeHTML(item.title)}</div>
             <div class="thread-meta">
               <span>👤 Author: ${escapeHTML(item.author)}${getSponsorBadgeMarkup(item.author)}</span>
-              <span>💬 Replies: ${item.replies.length}</span>
+              <span>💬 Replies: ${item.replies ? item.replies.length : 0}</span>
               <span>🕒 Posted: ${item.time}</span>
             </div>
           </div>
@@ -373,8 +388,11 @@
       };
 
       threadsDatabase.unshift(newTopic);
-      renderThreadIndex(); await uploadToDeno();
-      document.getElementById('threadTitle').value = ''; document.getElementById('threadContent').value = '';
+      renderThreadIndex(); 
+      await uploadToDeno();
+      
+      document.getElementById('threadTitle').value = ''; 
+      document.getElementById('threadContent').value = '';
       returnToDashboard();
     }
 
@@ -384,11 +402,11 @@
       document.getElementById('activeThreadTitle').innerText = target.title;
       document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}${getSponsorBadgeMarkup(target.author)}</span> <span>🕒 Time: ${target.time}</span>`;
       document.getElementById('activeThreadBody').innerText = target.body;
-      renderReplies(target.replies);
+      renderReplies(target.replies || []);
     }
 
     function renderReplies(repliesArray) {
-      const feed = document.getElementById('nestedReplyFeed'); feed.innerHTML = '';
+      const feed = document.getElementById('nestedReplyFeed'); if (!feed) return; feed.innerHTML = '';
       const isAdmin = (currentSessionRank === "ADMIN");
       if (repliesArray.length === 0) { feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>'; return; }
 
@@ -415,6 +433,7 @@
     async function submitReply() {
       if (!currentSessionUser) return; const text = document.getElementById('replyText').value.trim(); if (!text) return;
       const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
+      if (!activeThread.replies) activeThread.replies = [];
 
       const newReply = { user: currentSessionUser, text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
       activeThread.replies.push(newReply); renderReplies(activeThread.replies); await uploadToDeno();
