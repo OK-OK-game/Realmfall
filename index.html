@@ -46,6 +46,12 @@
     .action-btn.sponsor-gold { border-color: var(--neon-gold); color: var(--neon-gold); }
     .action-btn.sponsor-gold:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px rgba(251,191,36,0.4); }
 
+    /* 👑 Premium Glowing Crimson Owner Tag Style */
+    .owner-tag-badge {
+      color: var(--neon-red); font-weight: 900; font-size: 12px; letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.8); margin-left: 6px;
+    }
+
     .sponsor-tag-badge {
       color: var(--neon-gold); font-weight: 900; font-size: 12px; letter-spacing: 1px;
       text-shadow: 0 0 8px rgba(251,191,36,0.6); margin-left: 6px;
@@ -143,7 +149,7 @@
         </div>
         <div class="form-group">
           <label>Security Key Token Passcode</label>
-          <input type="password" id="loginToken" placeholder="Enter any player passcode or admin developer code...">
+          <input type="password" id="loginToken" placeholder="Enter custom account code...">
         </div>
         <div style="display:flex; gap:10px;">
           <button class="action-btn" onclick="executeSecureLogin()">Verify Account</button>
@@ -204,7 +210,10 @@
 
   <script>
     // 🛡️ SECURITY PERMISSIONS MATRIX
-    const ADMIN_ACCOUNTS = ["OK-OK-game", "babah-black-sheep"];
+    const MASTER_OWNER_ACCOUNT = "OK-OK-game";
+    const MASTER_OWNER_CODE = "1234"; // Your new custom secure owner passcode!
+    
+    const ADMIN_ACCOUNTS = ["babah-black-sheep"];
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
 
     // 🪙 VERIFIED SERVER SPONSORS INDEX LIST
@@ -223,7 +232,6 @@
         currentSessionRank = cachedRank;
       }
       
-      // Load from clean hybrid local matrix cache storage instantly
       threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_threads'));
       if (!threadsDatabase || threadsDatabase.length === 0) {
         threadsDatabase = [{
@@ -250,10 +258,28 @@
       const token = document.getElementById('loginToken').value.trim();
       if (!user || !token) { alert("Please complete both account entries!"); return; }
 
-      if (ADMIN_ACCOUNTS.includes(user)) {
-        if (token === MASTER_ADMIN_PASSCODE) { currentSessionUser = user; currentSessionRank = "ADMIN"; } 
-        else { alert("Security Error: Invalid Developer Master Token Passcode!"); return; }
-      } else {
+      // 👑 OWNER LOGIN GATE LANE
+      if (user === MASTER_OWNER_ACCOUNT) {
+        if (token === MASTER_OWNER_CODE) {
+          currentSessionUser = user;
+          currentSessionRank = "OWNER";
+        } else {
+          alert("Security Error: Invalid Owner Master Passcode!");
+          return;
+        }
+      }
+      // 🛡️ ADMIN LOGIN LANE
+      else if (ADMIN_ACCOUNTS.includes(user)) {
+        if (token === MASTER_ADMIN_PASSCODE) { 
+          currentSessionUser = user; 
+          currentSessionRank = "ADMIN"; 
+        } else { 
+          alert("Security Error: Invalid Admin Passcode!"); 
+          return; 
+        }
+      } 
+      // 👤 STANDARD PLAYER LOGIN LANE
+      else {
         currentSessionUser = user;
         currentSessionRank = "PLAYER";
       }
@@ -275,13 +301,16 @@
       if (!badge) return;
       
       const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
-      let titlePrefix = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
+      let sponsorMarkup = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
 
-      if (currentSessionRank === "ADMIN") {
-        badge.innerHTML = `👑 Admin: ${currentSessionUser}${titlePrefix}`;
+      if (currentSessionRank === "OWNER") {
+        badge.innerHTML = `👑 Owner: ${currentSessionUser} <span class='owner-tag-badge'>[OWNER]</span>${sponsorMarkup}`;
+        badge.style.color = "var(--neon-red)";
+      } else if (currentSessionRank === "ADMIN") {
+        badge.innerHTML = `🛡️ Admin: ${currentSessionUser}${sponsorMarkup}`;
         badge.style.color = "var(--neon-blue)";
       } else if (currentSessionRank === "PLAYER") {
-        badge.innerHTML = `👤 Player: ${currentSessionUser}${titlePrefix}`;
+        badge.innerHTML = `👤 Player: ${currentSessionUser}${sponsorMarkup}`;
         badge.style.color = "#34d399";
       } else {
         badge.innerText = "🔍 Guest Mode";
@@ -297,26 +326,28 @@
       }
     }
 
-    function getSponsorBadgeMarkup(authorName) {
-      return VERIFIED_SPONSORS.includes(authorName) ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
+    function getRankTagBadgeMarkup(authorName) {
+      if (authorName === MASTER_OWNER_ACCOUNT) return " <span class='owner-tag-badge'>[OWNER]</span>";
+      if (VERIFIED_SPONSORS.includes(authorName)) return " <span class='sponsor-tag-badge'>[SPONSOR]</span>";
+      return "";
     }
 
     function renderThreadIndex() {
       const feed = document.getElementById('mainThreadFeed');
       if (!feed) return;
       feed.innerHTML = '';
-      const isAdmin = (currentSessionRank === "ADMIN");
+      const hasDeletePowers = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
 
       threadsDatabase.forEach(item => {
         const row = document.createElement('div');
         row.className = 'thread-row';
-        let deleteBtnHtml = isAdmin ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete Thread</button>` : '';
+        let deleteBtnHtml = hasDeletePowers ? `<button class="admin-delete-btn" onclick="deleteThread(${item.id}, event)">🗑️ Delete Thread</button>` : '';
 
         row.innerHTML = `
           <div class="thread-info" onclick="openThreadChannel(${item.id})">
             <div class="thread-title">${escapeHTML(item.title)}</div>
             <div class="thread-meta">
-              <span>👤 Author: ${escapeHTML(item.author)}${getSponsorBadgeMarkup(item.author)}</span>
+              <span>👤 Author: ${escapeHTML(item.author)}${getRankTagBadgeMarkup(item.author)}</span>
               <span>💬 Replies: ${item.replies ? item.replies.length : 0}</span>
               <span>🕒 Posted: ${item.time}</span>
             </div>
@@ -328,7 +359,8 @@
     }
 
     function deleteThread(id, event) {
-      event.stopPropagation(); if (currentSessionRank !== "ADMIN") return;
+      event.stopPropagation(); 
+      if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return;
       if (!confirm("Wipe this topic thread permanently?")) return;
       threadsDatabase = threadsDatabase.filter(x => x.id !== id);
       localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
@@ -363,22 +395,22 @@
       selectedThreadId = id; const target = threadsDatabase.find(x => x.id === id); if (!target) return;
       hideAllPanels(); document.getElementById('channelView').classList.remove('hidden');
       document.getElementById('activeThreadTitle').innerText = target.title;
-      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}${getSponsorBadgeMarkup(target.author)}</span> <span>🕒 Time: ${target.time}</span>`;
+      document.getElementById('activeThreadMeta').innerHTML = `<span>👤 Posted by: ${target.author}${getRankTagBadgeMarkup(target.author)}</span> <span>🕒 Time: ${target.time}</span>`;
       document.getElementById('activeThreadBody').innerText = target.body;
       renderReplies(target.replies || []);
     }
 
     function renderReplies(repliesArray) {
       const feed = document.getElementById('nestedReplyFeed'); if (!feed) return; feed.innerHTML = '';
-      const isAdmin = (currentSessionRank === "ADMIN");
+      const hasDeletePowers = (currentSessionRank === "OWNER" || currentSessionRank === "ADMIN");
       if (repliesArray.length === 0) { feed.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">No responses yet.</p>'; return; }
 
       repliesArray.forEach((item, index) => {
         const card = document.createElement('div'); card.className = 'reply-card';
-        let deleteReplyBtn = isAdmin ? `<button class="admin-delete-btn" onclick="deleteReply(${index})">🗑️ Delete Reply</button>` : '';
+        let deleteReplyBtn = hasDeletePowers ? `<button class="admin-delete-btn" onclick="deleteReply(${index})">🗑️ Delete Reply</button>` : '';
         card.innerHTML = `
           <div class="thread-info">
-            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}${getSponsorBadgeMarkup(item.user)}</span> <span>🕒 ${item.time}</span></div>
+            <div class="reply-header"><span>👤 ${escapeHTML(item.user)}${getRankTagBadgeMarkup(item.user)}</span> <span>🕒 ${item.time}</span></div>
             <div class="reply-body">${escapeHTML(item.text)}</div>
           </div>
           ${deleteReplyBtn}
@@ -388,7 +420,8 @@
     }
 
     function deleteReply(index) {
-      if (currentSessionRank !== "ADMIN") return; if (!confirm("Delete reply?")) return;
+      if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return; 
+      if (!confirm("Delete reply?")) return;
       const activeThread = threadsDatabase.find(x => x.id === selectedThreadId); if (!activeThread) return;
       activeThread.replies.splice(index, 1);
       localStorage.setItem('realmfall_hybrid_threads', JSON.stringify(threadsDatabase));
