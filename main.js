@@ -1,36 +1,29 @@
 // 🦖 DENO CORE SERVER WITH BUILT-IN AUTOMATED CRON SCHEDULER
 const kv = await Deno.openKv();
 
-// 🕒 AUTOMATED CRON ENGINE: Sets a task to check the database timing logs
-// This checks the network loops and appends a fresh announcement thread 
-Deno.cron("Weekly System Core Announcement", "0 15 * * *", async () => {
-  const targetDate = new Date("2026-09-04T15:00:00-05:00").getTime(); // Exactly 1 week from now (Friday, Sept 4, 3:00 PM)
-  const currentDate = Date.now();
+// 🕒 RECURRING FRIDAY CRON ENGINE: Triggers at exactly 3:00 PM (15:00) every Friday afternoon
+Deno.cron("Weekly Friday System Core Thank You Post", "0 15 * * 5", async () => {
+  try {
+    const result = await kv.get(["realmfall_boards"]);
+    let currentThreads = result.value || [];
 
-  // If the cloud calendar reaches or passes the target time node, execute the insertion trigger
-  if (currentDate >= targetDate) {
-    const checkFlag = await kv.get(["cron_executed_sept4"]);
+    // Construct the friendly Friday message payload
+    const fridayPost = {
+      id: Date.now(), // Creates a unique timestamp block
+      author: "System_Core",
+      title: "🎉 Happy Friday! Quick Message From System_Core",
+      body: "Hey everyone! It is officially Friday and the weekend is here. I hope you all enjoyed the website this week! Thank you so much for still hanging out on the website, playing the games, and posting on the forums. Stay tuned for more game updates!",
+      replies: [],
+      time: "03:00 PM"
+    };
+
+    // Unshift adds the post straight to the very top of your forum feed index layout
+    currentThreads.unshift(fridayPost);
+    await kv.set(["realmfall_boards"], currentThreads);
     
-    // Safety lock: Ensure the automated bot only creates the post EXACTLY once!
-    if (!checkFlag.value) {
-      const result = await kv.get(["realmfall_boards"]);
-      let currentThreads = result.value || [];
-
-      // Construct the automated System Core post payload matrix
-      const systemPost = {
-        id: Date.now(),
-        author: "System_Core",
-        title: "📢 Realmfall Network Maintenance and Optimization Report",
-        body: "Automated core diagnostic completed. All forum matrix nodes, localStorage shards, and GDevelop game portal assets are performing stably at 100% capacity.",
-        replies: [],
-        time: "03:00 PM"
-      };
-
-      currentThreads.unshift(systemPost);
-      await kv.set(["realmfall_boards"], currentThreads);
-      await kv.set(["cron_executed_sept4"], true); // Engagement lock secured
-      console.log("Automated 1-week system message successfully broadcasted!");
-    }
+    console.log("Weekly Friday thank-you message successfully broadcasted!");
+  } catch (err) {
+    console.error("Cron failed to inject Friday post:", err.message);
   }
 });
 
