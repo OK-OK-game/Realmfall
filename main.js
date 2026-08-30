@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers });
   const url = new URL(req.url);
 
-  // 🕒 1. THE FRIDAY AUTOMATION TRIGGER ROUTE
+  // 🕒 1. THE FRIDAY AUTOMATION TRIGGER ROUTE (This fixes your 404!)
   if (url.pathname === "/trigger-friday-post") {
     try {
       const result = await kv.get(["realmfall_boards"]);
