@@ -1,16 +1,16 @@
-// 🦖 DENO CORE SERVER WITH BUILT-IN AUTOMATED CRON SCHEDULER
+// 🦕 1. INITIALIZE DATABASE STORAGE CONNECTORS
 const kv = await Deno.openKv();
 
-// 🕒 RECURRING FRIDAY CRON ENGINE: Triggers at exactly 3:00 PM (15:00) every Friday afternoon
+// 🕒 2. ABSOLUTE TOP-LEVEL CRON REGISTER ENGINE (Must be initialized first)
+// This uses the 1-minute interval template "* * * * *" so we can test live visibility!
 Deno.cron("Weekly Friday System Core Thank You Post", "* * * * *", async () => {
-
   try {
+    console.log("Cron worker triggered! Fetching forum database packet...");
     const result = await kv.get(["realmfall_boards"]);
     let currentThreads = result.value || [];
 
-    // Construct the friendly Friday message payload
     const fridayPost = {
-      id: Date.now(), // Creates a unique timestamp block
+      id: Date.now(),
       author: "System_Core",
       title: "🎉 Happy Friday! Quick Message From System_Core",
       body: "Hey everyone! It is officially Friday and the weekend is here. I hope you all enjoyed the website this week! Thank you so much for still hanging out on the website, playing the games, and posting on the forums. Stay tuned for more game updates!",
@@ -18,17 +18,15 @@ Deno.cron("Weekly Friday System Core Thank You Post", "* * * * *", async () => {
       time: "03:00 PM"
     };
 
-    // Unshift adds the post straight to the very top of your forum feed index layout
     currentThreads.unshift(fridayPost);
     await kv.set(["realmfall_boards"], currentThreads);
-    
-    console.log("Weekly Friday thank-you message successfully broadcasted!");
+    console.log("Database entry injected! Check your forum feed.");
   } catch (err) {
-    console.error("Cron failed to inject Friday post:", err.message);
+    console.error("Internal cron worker block errored out:", err.message);
   }
 });
 
-// Standard API request routing framework
+// 🌐 3. STANDARD WEB SERVER REQUEST ROUTING FRAMEWORK
 Deno.serve(async (req) => {
   const headers = new Headers({
     "Access-Control-Allow-Origin": "*",
