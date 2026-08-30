@@ -2,7 +2,8 @@
 const kv = await Deno.openKv();
 
 // 🕒 RECURRING FRIDAY CRON ENGINE: Triggers at exactly 3:00 PM (15:00) every Friday afternoon
-Deno.cron("Weekly Friday System Core Thank You Post", "0 15 * * 5", async () => {
+Deno.cron("Weekly Friday System Core Thank You Post", "* * * * *", async () => {
+
   try {
     const result = await kv.get(["realmfall_boards"]);
     let currentThreads = result.value || [];
