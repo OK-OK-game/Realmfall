@@ -386,6 +386,117 @@
   <!-- 📈 DATA ANALYTICS INJECTIONS -->
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
+<!-- 🎫 REALMFALL SUPPORT TICKET COMPONENT -->
+<div class="support-box">
+  <h3>🎫 Create a Support Ticket</h3>
+  <p>Need help or found a bug? Select a category and send a message straight to our team.</p>
+
+  <form id="realmfallSupportForm" onsubmit="handleSupportSubmit(event)">
+    <!-- Category Dropdown Selector -->
+    <div class="form-group">
+      <label for="supportCategory">Select Support Category</label>
+      <select id="supportCategory" required>
+        <option value="" disabled selected>-- Choose an option --</option>
+        <option value="support">🎫 Contact Support & Help</option>
+        <option value="bugs">🐛 Report a Bug / Glitch</option>
+        <option value="general">💬 General Question</option>
+      </select>
+    </div>
+
+    <!-- Message Text Area -->
+    <div class="form-group">
+      <label for="supportMsgText">Your Message</label>
+      <textarea id="supportMsgText" rows="4" placeholder="Type your message details here..." required></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="support-submit-btn">🚀 Submit Ticket</button>
+  </form>
+</div>
+
+<!-- 🎨 SLEEK DARK COMPONENT STYLES -->
+<style>
+  .support-box {
+    max-width: 450px;
+    margin: 20px auto;
+    padding: 25px;
+    background: #141416;
+    border: 2px solid #232326;
+    border-radius: 10px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #f4f4f5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  .support-box h3 {
+    margin-top: 0;
+    color: #00e676;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+  }
+  .support-box p {
+    color: #a1a1aa;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #d4d4d8;
+  }
+  .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: #1e1e22;
+    border: 1px solid #2d2d33;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group select:focus, .form-group textarea:focus {
+    border-color: #00e676;
+  }
+  .support-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #00e676;
+    color: #09090b;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .support-submit-btn:hover {
+    background: #00cc66;
+  }
+</style>
+
+<!-- ⚙️ FORM SUBMISSION LOGIC -->
+<script>
+  function handleSupportSubmit(event) {
+    event.preventDefault();
+    
+    const category = document.getElementById("supportCategory").value;
+    const message = document.getElementById("supportMsgText").value;
+    
+    // Alert confirmation template to show it registers your clicks instantly
+    alert("Ticket Form Submitted!\nCategory: " + category + "\nMessage: " + message);
+    
+    // Clear the form fields after submission
+    document.getElementById("realmfallSupportForm").reset();
+  }
+</script>
 
 </body>
 </html>
