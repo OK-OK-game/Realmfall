@@ -482,18 +482,29 @@
   }
 </style>
 
-<!-- ⚙️ FORM SUBMISSION LOGIC -->
+<!-- ⚙️ AUTOMATIC ROUTING ENGINE -->
 <script>
   function handleSupportSubmit(event) {
     event.preventDefault();
     
+    // Your exact support inbox destination address
+    const supportEmail = "krueger.owen@jdragonmail.us";
+    
     const category = document.getElementById("supportCategory").value;
     const message = document.getElementById("supportMsgText").value;
     
-    // Alert confirmation template to show it registers your clicks instantly
-    alert("Ticket Form Submitted!\nCategory: " + category + "\nMessage: " + message);
+    // Automatically encodes text formatting parameters
+    const emailSubject = encodeURIComponent(`[Realmfall Support Ticket] ${category}`);
+    const emailBody = encodeURIComponent(
+      `Support Category: ${category}\n` +
+      `-------------------------------------\n\n` +
+      `${message}`
+    );
     
-    // Clear the form fields after submission
+    // Fires up the player's mail application instantly with data pre-loaded
+    window.location.href = `mailto:${supportEmail}?subject=${emailSubject}&body=${emailBody}`;
+    
+    // Resets the inputs clear
     document.getElementById("realmfallSupportForm").reset();
   }
 </script>
