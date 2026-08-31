@@ -536,7 +536,42 @@
   document.getElementById("realmfallSupportForm").reset();
 }
 
-</script>
+  <!-- All your other site mechanics and your support ticket form are up here -->
+
+  <!-- 📡 PASTE THE LIVE SYNC AUTOMATION SCRIPT RIGHT HERE -->
+  <script>
+    async function loadForumData() {
+      try {
+        const response = await fetch("https://deno.net");
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          threadsDatabase = data;
+        } else if (data.threads) {
+          threadsDatabase = data.threads;
+        } else if (window.threads) {
+          window.threads = data;
+        }
+
+        if (typeof renderThreadIndex === "function") {
+          renderThreadIndex();
+        } else if (typeof renderThreads === "function") {
+          renderThreads();
+        }
+        console.log("Global data download complete!");
+      } catch (err) {
+        console.error("Database connection dropped:", err.message);
+        const localData = localStorage.getItem('realmfall_hybrid_data');
+        if (localData) {
+          if (typeof threadsDatabase !== 'undefined') threadsDatabase = JSON.parse(localData);
+          if (typeof renderThreadIndex === "function") renderThreadIndex();
+        }
+      }
+    }
+
+    // Tells the browser to run this sync function automatically when the page loads
+    window.onload = loadForumData;
+  </script>
 
 </body>
 </html>
