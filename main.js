@@ -1,45 +1,8 @@
-// 🦕 1. CONNECT TO YOUR KEY-VALUE DATABASE DATA CORE
+// 🦕 INITIALIZE DATABASE STORAGE CONNECTORS
 const kv = await Deno.openKv();
 
-// 🕒 2. FREE AUTOMATIC INTERNAL CLOCK LOOP (Runs every 60 seconds)
-async function startInternalClock() {
-  console.log("⏰ Test loop initialized!");
-  while (true) {
-    try {
-      console.log("Injecting test Friday message...");
-      
-      const result = await kv.get(["realmfall_boards"]);
-      let currentThreads = result.value || [];
-
-      // Create the clean Friday message layout block
-      const fridayPost = {
-        id: Date.now(), // Uses a unique timestamp sequence to prevent overwrites
-        author: "System_Core",
-        title: "🎉 Happy Friday! Quick Message From System_Core",
-        body: "Hey everyone! It is officially Friday and the weekend is here. I hope you all enjoyed the website this week! Thank you so much for still hanging out on the website, playing the games, and posting on the forums. Stay tuned for more game updates!",
-        replies: [],
-        time: new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', timeZone: "America/Chicago" })
-      };
-
-      // Unshift drops the post straight to the very top slot of your discussion forum feed
-      currentThreads.unshift(fridayPost);
-      await kv.set(["realmfall_boards"], currentThreads);
-      console.log("Post injected successfully!");
-
-    } catch (err) {
-      console.error("Loop error:", err.message);
-    }
-
-    // Wait exactly 60 seconds (1 minute) before looping again
-    await new Promise(resolve => setTimeout(resolve, 60000));
-  }
-}
-
-// Launch the automatic loop background engine immediately on server boot
-startInternalClock();
-
-// 🌐 3. UNIVERSAL HOME PAGE REQUEST ROUTER (Bypasses the "Not Found" error completely)
 Deno.serve(async (req) => {
+  // Universal permissions so your main gaming website can read this data payload safely
   const headers = new Headers({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -48,9 +11,39 @@ Deno.serve(async (req) => {
   });
 
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers });
+  const url = new URL(req.url);
 
-  // This catches all incoming requests on your homepage and responds with your database data
-  const result = await kv.get(["realmfall_boards"]);
-  const threadsList = result.value || [];
-  return new Response(JSON.stringify(threadsList), { status: 200, headers });
+  // 🌐 FORUM & SUPPORT COMBINED DELIVERY DATA PIPELINE
+  if (url.pathname === "/threads" || url.pathname === "/") {
+    const result = await kv.get(["realmfall_boards"]);
+    let currentThreads = result.value || [];
+
+    // Formulate a structured master category mapping packet
+    const forumDataPacket = {
+      status: "ONLINE",
+      // This gives your frontend interface direct drop-down menu parameters to filter by
+      categories: [
+        { id: "general", label: "💬 General Discussion" },
+        { id: "bugs", label: "🐛 Report a Bug" },
+        { id: "support", label: "🎫 Contact Support & Help" }, // 👈 Your new Support drop-down addition!
+        { id: "updates", label: "📢 Game Updates" }
+      ],
+      threads: currentThreads
+    };
+
+    return new Response(JSON.stringify(forumDataPacket), { status: 200, headers });
+  }
+
+  // Fallback path handler to process standard client forum posts
+  if (req.method === "POST") {
+    try {
+      const dataPacket = await req.json();
+      if (dataPacket.threads) await kv.set(["realmfall_boards"], dataPacket.threads);
+      return new Response(JSON.stringify({ success: true }), { status: 200, headers });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), { status: 500, headers });
+    }
+  }
+
+  return new Response(JSON.stringify({ status: "ONLINE" }), { status: 200, headers });
 });
