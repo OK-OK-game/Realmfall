@@ -316,21 +316,50 @@
     }
 
     // 🛠️ SUBMISSION REPAIR: Locks data inside cache before Safari drops the context matrix
-    function submitNewThread(event) {
-      if (event) event.preventDefault();
-      const title = document.getElementById('threadTitle').value.trim();
-      const body = document.getElementById('threadContent').value.trim();
-      if (!title || !body) { alert("Fill all fields!"); return; }
+    async function submitNewThread(event) {
+  if (event) event.preventDefault();
 
-      threadsDatabase.unshift({
-        id: Date.now(), author: currentSessionUser, title: title, body: body, replies: [],
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      
-      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
-      document.getElementById('threadTitle').value = ''; document.getElementById('threadContent').value = '';
+  const title = document.getElementById('threadTitle').value.trim();
+  const body = document.getElementById('threadContent').value.trim();
+  
+  if (!title || !body) { 
+    alert("Fill all fields!"); 
+    return; 
+  }
+
+  const newThread = {
+    id: Date.now(),
+    author: currentSessionUser,
+    title: title,
+    body: body,
+    replies: [],
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
+
+  threadsDatabase.unshift(newThread);
+  renderThreadIndex();
+
+  try {
+    // 🚀 This critical line forces the text to save to your Deno cloud database for everyone
+    const response = await fetch("https://deno.net", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ threads: threadsDatabase })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      document.getElementById('threadTitle').value = '';
+      document.getElementById('threadContent').value = '';
       returnToDashboard();
     }
+  } catch (err) {
+    console.error("Network save failed, saving to local memory instead:", err.message);
+    localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+  }
+}
+
 
     function openThreadChannel(id) {
       selectedThreadId = id; const target = threadsDatabase.find(x => x.id === id); if (!target) return;
