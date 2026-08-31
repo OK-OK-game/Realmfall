@@ -63,7 +63,6 @@
     .game-tag-line { font-size: 13px; color: var(--neon-blue); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
     .game-main-title { font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
     .game-summary-text { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin: 0 0 15px 0; max-width: 550px; }
-
     .owner-tag-badge { color: var(--neon-red); font-weight: 900; font-size: 12px; text-shadow: 0 0 10px rgba(239, 68, 68, 0.8); margin-left: 6px; }
     .sponsor-tag-badge { color: var(--neon-gold); font-weight: 900; font-size: 12px; text-shadow: 0 0 8px rgba(251,191,36,0.6); margin-left: 6px; }
 
@@ -96,6 +95,25 @@
 
     .nested-container { border-left: 2px solid var(--neon-blue); padding-left: 20px; margin-top: 25px; }
     .reply-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; }
+
+    /* 🎫 MODULAR TIED SUPPORT TICKET PANEL STYLES */
+    .support-box {
+      max-width: 450px;
+      margin: 40px auto 20px auto;
+      padding: 25px;
+      background: #141416;
+      border: 2px solid #232326;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      text-align: left;
+    }
+    .support-box h3 { margin-top: 0; color: #00e676; font-size: 20px; letter-spacing: 0.5px; }
+    .support-box p { color: #a1a1aa; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+    .support-submit-btn {
+      width: 100%; padding: 12px; background: #00e676; color: #09090b; border: none;
+      border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background 0.2s;
+    }
+    .support-submit-btn:hover { background: #00cc66; }
   </style>
 </head>
 <body>
@@ -113,7 +131,6 @@
 
     <!-- VIEW 1: HOME HUB -->
     <div id="indexView" class="view-panel">
-      
       <!-- 🏨 HIGH-PERFORMANCE HOTEL TYCOON IDLE BUTTON MODULE -->
       <div class="game-showcase-panel">
         <div class="game-photo-mock">🏢🏨</div>
@@ -124,7 +141,6 @@
           <button class="action-btn" onclick="window.open('https://gd.games', '_blank')">🚀 Go to Game</button>
         </div>
       </div>
-
       <h2>Active Discussion Boards</h2>
       <div class="forum-feed" id="mainThreadFeed"></div>
     </div>
@@ -149,6 +165,7 @@
         <button class="action-btn secondary" onclick="returnToDashboard()" style="margin-left: 10px;">Back</button>
       </div>
     </div>
+
     <!-- LOGIN VIEW -->
     <div id="loginPortalView" class="view-panel hidden">
       <h2>🔐 Account Portal Verification</h2>
@@ -169,7 +186,6 @@
     <!-- NEW THREAD CREATOR -->
     <div id="createView" class="view-panel hidden">
       <h2>Launch New Discussion Thread</h2>
-      <!-- 🛠️ PREVENTION REPAIR: Prevents form reload drop bugs inside iOS Safari -->
       <form onsubmit="submitNewThread(event)" class="input-frame">
         <div class="form-group">
           <label>Thread Topic Header Title</label>
@@ -210,9 +226,32 @@
       </div>
     </div>
   </div>
+
+  <!-- 🎫 SUPPORT TICKETING CONTAINER LAYOUT -->
+  <div class="support-box">
+    <h3>🎫 Create a Support Ticket</h3>
+    <p>Need help or found a bug? Select a category and send a message straight to our team.</p>
+    <form id="realmfallSupportForm" onsubmit="handleSupportSubmit(event)">
+      <div class="form-group">
+        <label for="supportCategory">Select Support Category</label>
+        <select id="supportCategory" required>
+          <option value="" disabled selected>-- Choose an option --</option>
+          <option value="Support & Help">🎫 Contact Support & Help</option>
+          <option value="Bug Report">🐛 Report a Bug / Glitch</option>
+          <option value="General Question">💬 General Question</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="supportMsgText">Your Message</label>
+        <textarea id="supportMsgText" rows="4" placeholder="Type your message details here..." required></textarea>
+      </div>
+      <button type="submit" class="support-submit-btn">🚀 Submit Ticket</button>
+    </form>
+  </div>
+  <!-- ⚙️ UNIFIED CORE SCRIPT CONTROLLERS -->
   <script>
     const MASTER_OWNER_ACCOUNT = "OK-OK-game";
-    const MASTER_OWNER_CODE = "1234"; // Your secure owner code
+    const MASTER_OWNER_CODE = "1234";
     const ADMIN_ACCOUNTS = ["babah-black-sheep"];
     const MASTER_ADMIN_PASSCODE = "REALMFALL2026";
     const VERIFIED_SPONSORS = ["sponsor-username-1", "test-player-name"];
@@ -229,19 +268,30 @@
         currentSessionUser = cachedUser;
         currentSessionRank = cachedRank;
       }
-      
-      threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_data')) || [{
-        id: 1714092100000,
-        author: "System_Core",
-        title: "Welcome to the Realmfall Matrix Portal",
-        body: "Forum matrix is online and fully unblocked. Sign in above using your credentials to post threads or answers.",
-        replies: [],
-        time: "12:00 PM"
-      }];
-      
+      loadForumData();
       updateUIForActiveSession();
-      renderThreadIndex();
     });
+
+    async function loadForumData() {
+      try {
+        const response = await fetch("https://deno.net");
+        const data = await response.json();
+        if (Array.isArray(data)) { threadsDatabase = data; } 
+        else if (data.threads) { threadsDatabase = data.threads; }
+        renderThreadIndex();
+      } catch (err) {
+        console.error("Database connection dropped:", err.message);
+        threadsDatabase = JSON.parse(localStorage.getItem('realmfall_hybrid_data')) || [{
+          id: 1714092100000,
+          author: "System_Core",
+          title: "Welcome to the Realmfall Matrix Portal",
+          body: "Forum matrix is online and fully unblocked. Sign in above using your credentials to post threads.",
+          replies: [],
+          time: "12:00 PM"
+        }];
+        renderThreadIndex();
+      }
+    }
 
     function showLoginPanel() { hideAllPanels(); document.getElementById('loginPortalView').classList.remove('hidden'); }
     function showSponsorPanel() { hideAllPanels(); document.getElementById('sponsorPortalView').classList.remove('hidden'); }
@@ -268,8 +318,7 @@
     }
 
     function updateUIForActiveSession() {
-      const badge = document.getElementById('userRankBadge');
-      if (!badge) return;
+      const badge = document.getElementById('userRankBadge'); if (!badge) return;
       const isSponsor = VERIFIED_SPONSORS.includes(currentSessionUser);
       let sMark = isSponsor ? " <span class='sponsor-tag-badge'>[SPONSOR]</span>" : "";
 
@@ -285,7 +334,6 @@
         document.getElementById('replyGuestWarning').classList.add('hidden');
       }
     }
-
     function getTags(name) {
       if (name === MASTER_OWNER_ACCOUNT) return " <span class='owner-tag-badge'>[OWNER]</span>";
       if (VERIFIED_SPONSORS.includes(name)) return " <span class='sponsor-tag-badge'>[SPONSOR]</span>";
@@ -308,58 +356,47 @@
       });
     }
 
-    function deleteThread(id, event) {
+    async function deleteThread(id, event) {
       event.stopPropagation(); if (currentSessionRank !== "OWNER" && currentSessionRank !== "ADMIN") return;
-      threadsDatabase = threadsDatabase.filter(x => x.id !== id);
-      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
-      renderThreadIndex();
+      threadsDatabase = threadsDatabase.filter(x => x.id !== id); renderThreadIndex();
+      try {
+        await fetch("https://deno.net", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threads: threadsDatabase })
+        });
+      } catch (err) {
+        console.error("Deletion update failed:", err.message);
+        localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      }
     }
 
-    // 🛠️ SUBMISSION REPAIR: Locks data inside cache before Safari drops the context matrix
     async function submitNewThread(event) {
-  if (event) event.preventDefault();
+      if (event) event.preventDefault();
+      const title = document.getElementById('threadTitle').value.trim();
+      const body = document.getElementById('threadContent').value.trim();
+      if (!title || !body) { alert("Fill all fields!"); return; }
 
-  const title = document.getElementById('threadTitle').value.trim();
-  const body = document.getElementById('threadContent').value.trim();
-  
-  if (!title || !body) { 
-    alert("Fill all fields!"); 
-    return; 
-  }
-
-  const newThread = {
-    id: Date.now(),
-    author: currentSessionUser,
-    title: title,
-    body: body,
-    replies: [],
-    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  };
-
-  threadsDatabase.unshift(newThread);
-  renderThreadIndex();
-
-  try {
-    // 🚀 This critical line forces the text to save to your Deno cloud database for everyone
-    const response = await fetch("https://deno.net", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ threads: threadsDatabase })
-    });
-    
-    const result = await response.json();
-    
-    if (result.success) {
-      document.getElementById('threadTitle').value = '';
-      document.getElementById('threadContent').value = '';
-      returnToDashboard();
+      const newThread = {
+        id: Date.now(), author: currentSessionUser || "Guest", title: title, body: body, replies: [],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      threadsDatabase.unshift(newThread); renderThreadIndex();
+      try {
+        const response = await fetch("https://deno.net", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threads: threadsDatabase })
+        });
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('threadTitle').value = '';
+          document.getElementById('threadContent').value = '';
+          returnToDashboard();
+        }
+      } catch (err) {
+        console.error("Upload process failed:", err.message);
+        localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      }
     }
-  } catch (err) {
-    console.error("Network save failed, saving to local memory instead:", err.message);
-    localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
-  }
-}
-
 
     function openThreadChannel(id) {
       selectedThreadId = id; const target = threadsDatabase.find(x => x.id === id); if (!target) return;
@@ -383,23 +420,36 @@
       });
     }
 
-    function deleteReply(idx) {
+    async function deleteReply(idx) {
       const target = threadsDatabase.find(x => x.id === selectedThreadId); if (!target) return;
-      target.replies.splice(idx, 1);
-      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
-      renderReplies(target.replies);
+      target.replies.splice(idx, 1); renderReplies(target.replies);
+      try {
+        await fetch("https://deno.net", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threads: threadsDatabase })
+        });
+      } catch (err) {
+        console.error("Failed to upload updated comments list payload:", err.message);
+        localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      }
     }
 
-    function submitReply(event) {
+    async function submitReply(event) {
       if (event) event.preventDefault();
       const text = document.getElementById('replyText').value.trim(); if (!text) return;
       const target = threadsDatabase.find(x => x.id === selectedThreadId); if (!target) return;
       if (!target.replies) target.replies = [];
-      
-      target.replies.push({ user: currentSessionUser, text: text });
-      localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
-      renderReplies(target.replies);
-      document.getElementById('replyText').value = '';
+      target.replies.push({ user: currentSessionUser || "Guest", text: text });
+      renderReplies(target.replies); document.getElementById('replyText').value = '';
+      try {
+        await fetch("https://deno.net", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threads: threadsDatabase })
+        });
+      } catch (err) {
+        console.error("Comment delivery failed:", err.message);
+        localStorage.setItem('realmfall_hybrid_data', JSON.stringify(threadsDatabase));
+      }
     }
 
     function hideAllPanels() {
@@ -410,168 +460,21 @@
     function showNewThreadForm() { hideAllPanels(); document.getElementById('createView').classList.remove('hidden'); }
     function returnToDashboard() { hideAllPanels(); document.getElementById('indexView').classList.remove('hidden'); renderThreadIndex(); }
     function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+    function handleSupportSubmit(event) {
+      event.preventDefault();
+      const supportEmail = "owen_krueger@icloud.com";
+      const category = document.getElementById("supportCategory").value;
+      const message = document.getElementById("supportMsgText").value;
+      const emailSubject = encodeURIComponent(`[Realmfall Support Ticket] ${category}`);
+      const emailBody = encodeURIComponent(`Support Category: ${category}\n-------------------------------------\n\n${message}`);
+      window.location.href = `mailto:${supportEmail}?subject=${emailSubject}&body=${emailBody}`;
+      document.getElementById("realmfallSupportForm").reset();
+    }
   </script>
 
   <!-- 📈 DATA ANALYTICS INJECTIONS -->
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
-<!-- 🎫 REALMFALL SUPPORT TICKET COMPONENT -->
-<div class="support-box">
-  <h3>🎫 Create a Support Ticket</h3>
-  <p>Need help or found a bug? Select a category and send a message straight to our team.</p>
-
-  <form id="realmfallSupportForm" onsubmit="handleSupportSubmit(event)">
-    <!-- Category Dropdown Selector -->
-    <div class="form-group">
-      <label for="supportCategory">Select Support Category</label>
-      <select id="supportCategory" required>
-        <option value="" disabled selected>-- Choose an option --</option>
-        <option value="support">🎫 Contact Support & Help</option>
-        <option value="bugs">🐛 Report a Bug / Glitch</option>
-        <option value="general">💬 General Question</option>
-      </select>
-    </div>
-
-    <!-- Message Text Area -->
-    <div class="form-group">
-      <label for="supportMsgText">Your Message</label>
-      <textarea id="supportMsgText" rows="4" placeholder="Type your message details here..." required></textarea>
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="support-submit-btn">🚀 Submit Ticket</button>
-  </form>
-</div>
-
-<!-- 🎨 SLEEK DARK COMPONENT STYLES -->
-<style>
-  .support-box {
-    max-width: 450px;
-    margin: 20px auto;
-    padding: 25px;
-    background: #141416;
-    border: 2px solid #232326;
-    border-radius: 10px;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    color: #f4f4f5;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-  .support-box h3 {
-    margin-top: 0;
-    color: #00e676;
-    font-size: 20px;
-    letter-spacing: 0.5px;
-  }
-  .support-box p {
-    color: #a1a1aa;
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-  .form-group {
-    margin-bottom: 16px;
-    text-align: left;
-  }
-  .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #d4d4d8;
-  }
-  .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    background: #1e1e22;
-    border: 1px solid #2d2d33;
-    border-radius: 6px;
-    color: #ffffff;
-    font-size: 14px;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-group select:focus, .form-group textarea:focus {
-    border-color: #00e676;
-  }
-  .support-submit-btn {
-    width: 100%;
-    padding: 12px;
-    background: #00e676;
-    color: #09090b;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .support-submit-btn:hover {
-    background: #00cc66;
-  }
-</style>
-
-<!-- ⚙️ AUTOMATIC ROUTING ENGINE -->
-<script>
-  function handleSupportSubmit(event) {
-  event.preventDefault();
-  
-  // Your updated iCloud support inbox destination address
-  const supportEmail = "owen_krueger@icloud.com";
-  
-  const category = document.getElementById("supportCategory").value;
-  const message = document.getElementById("supportMsgText").value;
-  
-  const emailSubject = encodeURIComponent(`[Realmfall Support Ticket] ${category}`);
-  const emailBody = encodeURIComponent(
-    `Support Category: ${category}\n` +
-    `-------------------------------------\n\n` +
-    `${message}`
-  );
-  
-  // Fires up the player's local mail application with your iCloud details pre-loaded
-  window.location.href = `mailto:${supportEmail}?subject=${emailSubject}&body=${emailBody}`;
-  
-  // Resets the inputs clear
-  document.getElementById("realmfallSupportForm").reset();
-}
-
-  <!-- All your other site mechanics and your support ticket form are up here -->
-
-  <!-- 📡 PASTE THE LIVE SYNC AUTOMATION SCRIPT RIGHT HERE -->
-  <script>
-    async function loadForumData() {
-      try {
-        const response = await fetch("https://deno.net");
-        const data = await response.json();
-        
-        if (Array.isArray(data)) {
-          threadsDatabase = data;
-        } else if (data.threads) {
-          threadsDatabase = data.threads;
-        } else if (window.threads) {
-          window.threads = data;
-        }
-
-        if (typeof renderThreadIndex === "function") {
-          renderThreadIndex();
-        } else if (typeof renderThreads === "function") {
-          renderThreads();
-        }
-        console.log("Global data download complete!");
-      } catch (err) {
-        console.error("Database connection dropped:", err.message);
-        const localData = localStorage.getItem('realmfall_hybrid_data');
-        if (localData) {
-          if (typeof threadsDatabase !== 'undefined') threadsDatabase = JSON.parse(localData);
-          if (typeof renderThreadIndex === "function") renderThreadIndex();
-        }
-      }
-    }
-
-    // Tells the browser to run this sync function automatically when the page loads
-    window.onload = loadForumData;
-  </script>
-
 </body>
 </html>
